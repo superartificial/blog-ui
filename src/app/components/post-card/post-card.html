@@ -1,0 +1,7 @@
+<article class="post-card">
+  <a class="post-card-title" [routerLink]="['/posts', post().slug]">{{ post().title }}</a>
+  @if (post().excerpt) {
+    <p class="post-card-excerpt">{{ post().excerpt }}</p>
+  }
+  <time class="post-card-date">{{ formatDate(post().createdAt) }}</time>
+</article>

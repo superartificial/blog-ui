@@ -1,0 +1,23 @@
+<main class="container page-post">
+  @if (loading()) {
+    <div class="loading">
+      <span class="spinner"></span>
+    </div>
+  } @else if (notFound()) {
+    <div class="not-found">
+      <h1>Post not found</h1>
+      <a routerLink="/">← Back to writing</a>
+    </div>
+  } @else if (post()) {
+    <article>
+      <header class="post-header">
+        <h1 class="post-title">{{ post()!.title }}</h1>
+        <time class="post-date">{{ formatDate(post()!.createdAt) }}</time>
+      </header>
+      <div class="post-content" [innerHTML]="safeContent"></div>
+    </article>
+    <footer class="post-footer">
+      <a routerLink="/">← Back to writing</a>
+    </footer>
+  }
+</main>

@@ -1,0 +1,42 @@
+<main class="container page-login">
+  <div class="login-card">
+    <h1>Sign in</h1>
+
+    @if (error()) {
+      <p class="error-msg">{{ error() }}</p>
+    }
+
+    <form (ngSubmit)="submit()">
+      <div class="field">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          [(ngModel)]="username"
+          name="username"
+          autocomplete="username"
+          autofocus
+        />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="loading()">
+        @if (loading()) {
+          Signing in…
+        } @else {
+          Sign in
+        }
+      </button>
+    </form>
+  </div>
+</main>

@@ -1,0 +1,21 @@
+<main class="container page-home">
+  <header class="page-header">
+    <h1>Writing</h1>
+  </header>
+
+  @if (loading()) {
+    <div class="loading">
+      <span class="spinner"></span>
+    </div>
+  } @else if (error()) {
+    <p class="error-msg">{{ error() }}</p>
+  } @else if (posts().length === 0) {
+    <p class="empty-msg">No posts yet. Check back soon.</p>
+  } @else {
+    <div class="post-list">
+      @for (post of posts(); track post.id) {
+        <app-post-card [post]="post" />
+      }
+    </div>
+  }
+</main>

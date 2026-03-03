@@ -1,0 +1,49 @@
+<main class="container page-dashboard">
+  <header class="dashboard-header">
+    <h1>Posts</h1>
+    <a routerLink="/admin/new" class="btn-primary">New post</a>
+  </header>
+
+  @if (loading()) {
+    <div class="loading">
+      <span class="spinner"></span>
+    </div>
+  } @else if (error()) {
+    <p class="error-msg">{{ error() }}</p>
+  } @else if (posts().length === 0) {
+    <div class="empty-state">
+      <p>No published posts yet.</p>
+      <a routerLink="/admin/new" class="btn-primary">Write your first post</a>
+    </div>
+  } @else {
+    <table class="posts-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Date</th>
+          <th class="col-actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (post of posts(); track post.id) {
+          <tr>
+            <td class="col-title">
+              <a [href]="'/posts/' + post.slug" target="_blank">{{ post.title }}</a>
+            </td>
+            <td class="col-date">{{ formatDate(post.createdAt) }}</td>
+            <td class="col-actions">
+              <button class="btn-edit" (click)="editPost(post)">Edit</button>
+              <button
+                class="btn-delete"
+                (click)="deletePost(post)"
+                [disabled]="deletingId() === post.id"
+              >
+                {{ deletingId() === post.id ? '…' : 'Delete' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</main>

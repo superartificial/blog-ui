@@ -1,0 +1,76 @@
+<main class="container page-editor">
+  <header class="editor-header">
+    <h1>{{ isEditing() ? 'Edit post' : 'New post' }}</h1>
+    <a routerLink="/admin" class="btn-cancel">Cancel</a>
+  </header>
+
+  @if (error()) {
+    <p class="error-msg">{{ error() }}</p>
+  }
+
+  <form class="editor-form" (ngSubmit)="save()">
+    <div class="field">
+      <label for="title">Title</label>
+      <input
+        id="title"
+        type="text"
+        [(ngModel)]="post.title"
+        name="title"
+        (input)="onTitleChange()"
+        placeholder="Post title"
+      />
+    </div>
+
+    <div class="field">
+      <label for="slug">Slug</label>
+      <input
+        id="slug"
+        type="text"
+        [(ngModel)]="post.slug"
+        name="slug"
+        placeholder="post-slug"
+      />
+    </div>
+
+    <div class="field">
+      <label for="excerpt">Excerpt <span class="optional">(optional)</span></label>
+      <input
+        id="excerpt"
+        type="text"
+        [(ngModel)]="post.excerpt"
+        name="excerpt"
+        placeholder="Short description shown in post list"
+      />
+    </div>
+
+    <div class="field field-content">
+      <label for="content">Content <span class="hint">(HTML supported)</span></label>
+      <textarea
+        id="content"
+        [(ngModel)]="post.content"
+        name="content"
+        placeholder="Write your post here…"
+        rows="20"
+      ></textarea>
+    </div>
+
+    <div class="field field-checkbox">
+      <label class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="post.published" name="published" />
+        Publish immediately
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary" [disabled]="loading()">
+        @if (loading()) {
+          Saving…
+        } @else if (isEditing()) {
+          Save changes
+        } @else {
+          Create post
+        }
+      </button>
+    </div>
+  </form>
+</main>
