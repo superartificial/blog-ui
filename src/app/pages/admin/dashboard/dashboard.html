@@ -28,7 +28,7 @@
         @for (post of posts(); track post.id) {
           <tr>
             <td class="col-title">
-              <a [href]="'/posts/' + post.slug" target="_blank">{{ post.title }}</a>
+              <a [routerLink]="['/posts', post.slug]" target="_blank">{{ post.title }}</a>
             </td>
             <td class="col-date">{{ formatDate(post.createdAt) }}</td>
             <td class="col-actions">

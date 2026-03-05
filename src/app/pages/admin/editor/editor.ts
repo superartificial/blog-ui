@@ -31,13 +31,14 @@ export class Editor {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditing.set(true);
-      const navState = this.router.lastSuccessfulNavigation()?.extras?.state as { post?: Post };
-      if (navState?.post) {
-        this.post = { ...navState.post };
-      } else {
-        // No state — redirect back to dashboard
-        this.router.navigate(['/admin']);
-      }
+      this.loading.set(true);
+      this.postService.getPostById(+id).subscribe({
+        next: (post) => {
+          this.post = post;
+          this.loading.set(false);
+        },
+        error: () => this.router.navigate(['/admin']),
+      });
     }
   }
 

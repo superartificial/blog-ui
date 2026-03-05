@@ -16,6 +16,10 @@ export class PostService {
     return this.http.get<Post>(`${this.apiUrl}/posts/${slug}`);
   }
 
+  getPostById(id: number) {
+    return this.http.get<Post>(`${this.apiUrl}/posts/id/${id}`);
+  }
+
   createPost(post: Post) {
     return this.http.post<Post>(`${this.apiUrl}/posts`, post);
   }
