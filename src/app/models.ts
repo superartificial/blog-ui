@@ -1,12 +1,15 @@
-export interface Post {
+export interface PostSummary {
   id?: number;
   title: string;
   slug: string;
-  content: string;
   excerpt?: string;
   published?: boolean;
   createdAt?: string | number[];
   updatedAt?: string | number[];
+}
+
+export interface Post extends PostSummary {
+  content: string;
 }
 
 export interface LoginRequest {

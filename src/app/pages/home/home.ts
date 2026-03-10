@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { PostCard } from '../../components/post-card/post-card';
 import { PostService } from '../../services/post.service';
-import { Post } from '../../models';
+import { PostSummary } from '../../models';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +12,7 @@ import { Post } from '../../models';
 export class Home {
   private postService = inject(PostService);
 
-  posts = signal<Post[]>([]);
+  posts = signal<PostSummary[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
 

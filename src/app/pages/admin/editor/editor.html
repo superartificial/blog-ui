@@ -44,14 +44,8 @@
     </div>
 
     <div class="field field-content">
-      <label for="content">Content <span class="hint">(HTML supported)</span></label>
-      <textarea
-        id="content"
-        [(ngModel)]="post.content"
-        name="content"
-        placeholder="Write your post here…"
-        rows="20"
-      ></textarea>
+      <label>Content</label>
+      <textarea #contentArea></textarea>
     </div>
 
     <div class="field field-checkbox">

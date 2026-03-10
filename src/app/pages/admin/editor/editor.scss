@@ -105,6 +105,47 @@
   }
 }
 
+// EasyMDE overrides to match site theme
+.EasyMDEContainer {
+  .editor-toolbar {
+    border-color: var(--color-border);
+    border-radius: 6px 6px 0 0;
+    background: var(--color-bg-secondary);
+
+    button {
+      color: var(--color-text-muted);
+
+      &:hover,
+      &.active {
+        background: var(--color-border);
+        color: var(--color-text);
+        border-color: transparent;
+      }
+    }
+
+    i.separator {
+      border-color: var(--color-border);
+    }
+  }
+
+  .CodeMirror {
+    border-color: var(--color-border);
+    border-radius: 0 0 6px 6px;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    min-height: 400px;
+  }
+
+  .editor-preview,
+  .editor-preview-side {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+}
+
 .field-checkbox {
   .checkbox-label {
     display: flex;

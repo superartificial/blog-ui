@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Post, formatPostDate } from '../../models';
+import { PostSummary, formatPostDate } from '../../models';
 
 @Component({
   selector: 'app-post-card',
@@ -9,7 +9,7 @@ import { Post, formatPostDate } from '../../models';
   styleUrl: './post-card.scss',
 })
 export class PostCard {
-  post = input.required<Post>();
+  post = input.required<PostSummary>();
 
   formatDate(date: string | number[] | undefined): string {
     return formatPostDate(date);

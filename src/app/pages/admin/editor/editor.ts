@@ -1,8 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PostService } from '../../../services/post.service';
+import { ImageService } from '../../../services/image.service';
 import { Post } from '../../../models';
+import EasyMDE from 'easymde';
 
 @Component({
   selector: 'app-editor',
@@ -10,10 +12,15 @@ import { Post } from '../../../models';
   templateUrl: './editor.html',
   styleUrl: './editor.scss',
 })
-export class Editor {
+export class Editor implements AfterViewInit, OnDestroy {
+  @ViewChild('contentArea') contentAreaRef!: ElementRef<HTMLTextAreaElement>;
+
   private postService = inject(PostService);
+  private imageService = inject(ImageService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+
+  private mde: EasyMDE | null = null;
 
   isEditing = signal(false);
   loading = signal(false);
@@ -33,13 +40,44 @@ export class Editor {
       this.isEditing.set(true);
       this.loading.set(true);
       this.postService.getPostById(+id).subscribe({
-        next: (post) => {
+        next: (post: Post) => {
           this.post = post;
+          this.mde?.value(post.content ?? '');
           this.loading.set(false);
         },
         error: () => this.router.navigate(['/admin']),
       });
     }
+  }
+
+  ngAfterViewInit() {
+    this.mde = new EasyMDE({
+      element: this.contentAreaRef.nativeElement,
+      spellChecker: false,
+      autofocus: false,
+      toolbar: [
+        'bold', 'italic', 'heading', '|',
+        'quote', 'code', 'unordered-list', 'ordered-list', '|',
+        'link', 'upload-image', '|',
+        'preview', 'side-by-side', 'fullscreen', '|',
+        'guide',
+      ],
+      imageUploadFunction: (file, onSuccess, onError) => {
+        this.imageService.upload(file).subscribe({
+          next: (url) => onSuccess(url),
+          error: () => onError('Image upload failed'),
+        });
+      },
+    });
+
+    if (this.post.content) {
+      this.mde.value(this.post.content);
+    }
+  }
+
+  ngOnDestroy() {
+    this.mde?.toTextArea();
+    this.mde = null;
   }
 
   onTitleChange() {
@@ -58,11 +96,13 @@ export class Editor {
   }
 
   save() {
-    if (!this.post.title.trim() || !this.post.slug.trim() || !this.post.content.trim()) {
+    const content = this.mde?.value() ?? '';
+    if (!this.post.title.trim() || !this.post.slug.trim() || !content.trim()) {
       this.error.set('Title, slug, and content are required.');
       return;
     }
 
+    this.post.content = content;
     this.loading.set(true);
     this.error.set(null);
 

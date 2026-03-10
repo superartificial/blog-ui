@@ -3,6 +3,18 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PostService } from '../../services/post.service';
 import { Post, formatPostDate } from '../../models';
+import { marked } from 'marked';
+import { markedHighlight } from 'marked-highlight';
+import hljs from 'highlight.js';
+import DOMPurify from 'dompurify';
+
+marked.use(markedHighlight({
+  langPrefix: 'hljs language-',
+  highlight(code, lang) {
+    const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+    return hljs.highlight(code, { language }).value;
+  },
+}));
 
 @Component({
   selector: 'app-post',
@@ -16,6 +28,7 @@ export class PostPage {
   private sanitizer = inject(DomSanitizer);
 
   post = signal<Post | null>(null);
+  renderedContent = signal<SafeHtml>('');
   loading = signal(true);
   notFound = signal(false);
 
@@ -24,6 +37,9 @@ export class PostPage {
     this.postService.getPost(slug).subscribe({
       next: (post) => {
         this.post.set(post);
+        const html = marked.parse(post.content ?? '') as string;
+        const clean = DOMPurify.sanitize(html);
+        this.renderedContent.set(this.sanitizer.bypassSecurityTrustHtml(clean));
         this.loading.set(false);
       },
       error: (err) => {
@@ -31,10 +47,6 @@ export class PostPage {
         this.notFound.set(err.status === 404);
       },
     });
-  }
-
-  get safeContent(): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(this.post()?.content ?? '');
   }
 
   formatDate(date: string | number[] | undefined): string {

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Post } from '../models';
+import { Post, PostSummary } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
@@ -9,7 +9,7 @@ export class PostService {
   private apiUrl = environment.apiUrl;
 
   getPosts() {
-    return this.http.get<Post[]>(`${this.apiUrl}/posts`);
+    return this.http.get<PostSummary[]>(`${this.apiUrl}/posts`);
   }
 
   getPost(slug: string) {

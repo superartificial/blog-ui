@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { PostService } from '../../../services/post.service';
-import { Post, formatPostDate } from '../../../models';
+import { PostSummary, formatPostDate } from '../../../models';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +13,7 @@ export class Dashboard {
   private postService = inject(PostService);
   private router = inject(Router);
 
-  posts = signal<Post[]>([]);
+  posts = signal<PostSummary[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
   deletingId = signal<number | null>(null);
@@ -36,11 +36,11 @@ export class Dashboard {
     });
   }
 
-  editPost(post: Post) {
+  editPost(post: PostSummary) {
     this.router.navigate(['/admin/edit', post.id], { state: { post } });
   }
 
-  deletePost(post: Post) {
+  deletePost(post: PostSummary) {
     if (!post.id || !confirm(`Delete "${post.title}"?`)) return;
 
     this.deletingId.set(post.id);
