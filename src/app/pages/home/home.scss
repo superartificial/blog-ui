@@ -1,17 +1,49 @@
+/* HERO */
+
+.hero {
+  background: var(--color-bg-header);
+  padding: 3rem 0 3.5rem;
+  border-bottom: 3px solid var(--color-accent);
+}
+
+.hero-name {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: #ffffff;
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+}
+
+.hero-disciplines {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  align-items: center;
+}
+
+.hero-disciplines .sep {
+  color: var(--color-accent);
+  opacity: 0.6;
+}
+
+/* POST LIST */
+
 .page-home {
-  padding-top: 3rem;
-  padding-bottom: 4rem;
+  padding: 3rem 0 4rem;
+  flex: 1;
 }
 
-.page-header {
-  margin-bottom: 2rem;
-
-  h1 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-  }
+.post-list {
+  list-style: none;
 }
+
+/* STATES */
 
 .loading {
   display: flex;
@@ -30,9 +62,7 @@
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 .error-msg,
@@ -43,4 +73,12 @@
 
 .error-msg {
   color: var(--color-danger);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 2rem 0 2.5rem;
+  }
 }

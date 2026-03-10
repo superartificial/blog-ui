@@ -1,21 +1,36 @@
-<main class="container page-home">
-  <header class="page-header">
-    <h1>Writing</h1>
-  </header>
+<section class="hero">
+  <div class="container">
+    <h1 class="hero-name">Clem White</h1>
+    <p class="hero-disciplines">
+      <span>Software Developer</span>
+      <span class="sep">&middot;</span>
+      <span>3D &amp; Motion Designer</span>
+      <span class="sep">&middot;</span>
+      <span>Musician</span>
+      <span class="sep">&middot;</span>
+      <span>Photographer</span>
+    </p>
+  </div>
+</section>
 
-  @if (loading()) {
-    <div class="loading">
-      <span class="spinner"></span>
-    </div>
-  } @else if (error()) {
-    <p class="error-msg">{{ error() }}</p>
-  } @else if (posts().length === 0) {
-    <p class="empty-msg">No posts yet. Check back soon.</p>
-  } @else {
-    <div class="post-list">
-      @for (post of posts(); track post.id) {
-        <app-post-card [post]="post" />
-      }
-    </div>
-  }
+<main class="page-home">
+  <div class="container">
+
+    @if (loading()) {
+      <div class="loading">
+        <span class="spinner"></span>
+      </div>
+    } @else if (error()) {
+      <p class="error-msg">{{ error() }}</p>
+    } @else if (posts().length === 0) {
+      <p class="empty-msg">No posts yet. Check back soon.</p>
+    } @else {
+      <ul class="post-list">
+        @for (post of posts(); track post.id) {
+          <li><app-post-card [post]="post" /></li>
+        }
+      </ul>
+    }
+
+  </div>
 </main>
