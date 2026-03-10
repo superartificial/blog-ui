@@ -12,6 +12,16 @@ export interface Post extends PostSummary {
   content: string;
 }
 
+export interface ContactSubmission {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  ipAddress: string;
+  submittedAt: string | number[];
+  read: boolean;
+}
+
 export interface LoginRequest {
   username: string;
   password: string;

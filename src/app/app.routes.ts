@@ -11,6 +11,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/post/post').then((m) => m.PostPage),
   },
   {
+    path: 'contact',
+    loadComponent: () => import('./pages/contact/contact').then((m) => m.ContactPage),
+  },
+  {
     path: 'admin/login',
     loadComponent: () => import('./pages/admin/login/login').then((m) => m.Login),
   },
@@ -28,6 +32,11 @@ export const routes: Routes = [
     path: 'admin/edit/:id',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/admin/editor/editor').then((m) => m.Editor),
+  },
+  {
+    path: 'admin/contacts',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/admin/contacts/contacts').then((m) => m.Contacts),
   },
   {
     path: '**',
