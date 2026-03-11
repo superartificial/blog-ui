@@ -12,6 +12,10 @@ export class PostService {
     return this.http.get<PostSummary[]>(`${this.apiUrl}/posts`);
   }
 
+  getAllPosts() {
+    return this.http.get<PostSummary[]>(`${this.apiUrl}/posts/admin/all`);
+  }
+
   getPost(slug: string) {
     return this.http.get<Post>(`${this.apiUrl}/posts/${slug}`);
   }

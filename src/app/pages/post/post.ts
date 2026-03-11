@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PostService } from '../../services/post.service';
+import { AuthService } from '../../services/auth.service';
 import { Post, formatPostDate } from '../../models';
 import { marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
@@ -26,6 +27,7 @@ export class PostPage {
   private route = inject(ActivatedRoute);
   private postService = inject(PostService);
   private sanitizer = inject(DomSanitizer);
+  authService = inject(AuthService);
 
   post = signal<Post | null>(null);
   renderedContent = signal<SafeHtml>('');
@@ -60,6 +62,15 @@ export class PostPage {
 
   formatDate(date: string | number[] | undefined): string {
     return formatPostDate(date);
+  }
+
+  statusLabel(status: string): string {
+    switch (status) {
+      case 'DRAFT': return 'Draft — not publicly visible';
+      case 'AWAITING_REVIEW': return 'Awaiting review — not publicly visible';
+      case 'ARCHIVED': return 'Archived — not publicly visible';
+      default: return status;
+    }
   }
 
   scrollTo(id: string) {

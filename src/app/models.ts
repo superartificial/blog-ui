@@ -3,7 +3,7 @@ export interface PostSummary {
   title: string;
   slug: string;
   excerpt?: string;
-  published?: boolean;
+  status?: string;
   createdAt?: string | number[];
   updatedAt?: string | number[];
 }

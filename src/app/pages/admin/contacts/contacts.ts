@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ContactService } from '../../../services/contact.service';
 import { ContactSubmission, formatPostDate } from '../../../models';
 
@@ -15,6 +15,17 @@ export class Contacts {
   loading = signal(true);
   error = signal<string | null>(null);
   markingId = signal<number | null>(null);
+  deletingId = signal<number | null>(null);
+  filter = signal<'all' | 'unread' | 'read'>('all');
+
+  filteredSubmissions = computed(() => {
+    const f = this.filter();
+    return this.submissions().filter((s) => {
+      if (f === 'unread') return !s.read;
+      if (f === 'read') return s.read;
+      return true;
+    });
+  });
 
   constructor() {
     this.load();
@@ -44,6 +55,20 @@ export class Contacts {
       },
       error: () => {
         this.markingId.set(null);
+      },
+    });
+  }
+
+  deleteSubmission(submission: ContactSubmission) {
+    if (!confirm(`Delete message from ${submission.name}?`)) return;
+    this.deletingId.set(submission.id);
+    this.contactService.deleteSubmission(submission.id).subscribe({
+      next: () => {
+        this.submissions.update((list) => list.filter((s) => s.id !== submission.id));
+        this.deletingId.set(null);
+      },
+      error: () => {
+        this.deletingId.set(null);
       },
     });
   }

@@ -9,34 +9,51 @@
     </div>
   } @else if (error()) {
     <p class="error-msg">{{ error() }}</p>
-  } @else if (submissions().length === 0) {
-    <div class="empty-state">
-      <p>No contact submissions yet.</p>
-    </div>
   } @else {
-    <div class="submission-list">
-      @for (sub of submissions(); track sub.id) {
-        <div class="submission" [class.unread]="!sub.read">
-          <div class="submission-meta">
-            <span class="submission-name">{{ sub.name }}</span>
-            <a class="submission-email" href="mailto:{{ sub.email }}">{{ sub.email }}</a>
-            <span class="submission-date">{{ formatDate(sub.submittedAt) }}</span>
-            @if (!sub.read) {
-              <span class="badge-unread">New</span>
-            }
-          </div>
-          <p class="submission-message">{{ sub.message }}</p>
-          @if (!sub.read) {
-            <button
-              class="btn-mark-read"
-              (click)="markRead(sub)"
-              [disabled]="markingId() === sub.id"
-            >
-              {{ markingId() === sub.id ? '…' : 'Mark as read' }}
-            </button>
-          }
-        </div>
-      }
+    <div class="filter-bar">
+      <button class="filter-btn" [class.active]="filter() === 'all'" (click)="filter.set('all')">All</button>
+      <button class="filter-btn" [class.active]="filter() === 'unread'" (click)="filter.set('unread')">Unread</button>
+      <button class="filter-btn" [class.active]="filter() === 'read'" (click)="filter.set('read')">Read</button>
     </div>
+
+    @if (filteredSubmissions().length === 0) {
+      <div class="empty-state">
+        <p>No submissions to show.</p>
+      </div>
+    } @else {
+      <div class="submission-list">
+        @for (sub of filteredSubmissions(); track sub.id) {
+          <div class="submission" [class.unread]="!sub.read">
+            <div class="submission-meta">
+              <span class="submission-name">{{ sub.name }}</span>
+              <a class="submission-email" href="mailto:{{ sub.email }}">{{ sub.email }}</a>
+              <span class="submission-date">{{ formatDate(sub.submittedAt) }}</span>
+              @if (!sub.read) {
+                <span class="badge-unread">New</span>
+              }
+            </div>
+            <p class="submission-message">{{ sub.message }}</p>
+            <div class="submission-actions">
+              @if (!sub.read) {
+                <button
+                  class="btn-mark-read"
+                  (click)="markRead(sub)"
+                  [disabled]="markingId() === sub.id"
+                >
+                  {{ markingId() === sub.id ? '…' : 'Mark as read' }}
+                </button>
+              }
+              <button
+                class="btn-delete"
+                (click)="deleteSubmission(sub)"
+                [disabled]="deletingId() === sub.id"
+              >
+                {{ deletingId() === sub.id ? '…' : 'Delete' }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
   }
 </main>

@@ -10,40 +10,54 @@
     </div>
   } @else if (error()) {
     <p class="error-msg">{{ error() }}</p>
-  } @else if (posts().length === 0) {
-    <div class="empty-state">
-      <p>No published posts yet.</p>
-      <a routerLink="/admin/new" class="btn-primary">Write your first post</a>
-    </div>
   } @else {
-    <table class="posts-table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Date</th>
-          <th class="col-actions">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (post of posts(); track post.id) {
+    <div class="filter-bar">
+      <button class="filter-btn" [class.active]="statusFilter() === 'all'" (click)="statusFilter.set('all')">All</button>
+      <button class="filter-btn" [class.active]="statusFilter() === 'DRAFT'" (click)="statusFilter.set('DRAFT')">Draft</button>
+      <button class="filter-btn" [class.active]="statusFilter() === 'AWAITING_REVIEW'" (click)="statusFilter.set('AWAITING_REVIEW')">Awaiting review</button>
+      <button class="filter-btn" [class.active]="statusFilter() === 'PUBLISHED'" (click)="statusFilter.set('PUBLISHED')">Published</button>
+      <button class="filter-btn" [class.active]="statusFilter() === 'ARCHIVED'" (click)="statusFilter.set('ARCHIVED')">Archived</button>
+    </div>
+
+    @if (filteredPosts().length === 0) {
+      <div class="empty-state">
+        <p>No posts here.</p>
+        <a routerLink="/admin/new" class="btn-primary">Write your first post</a>
+      </div>
+    } @else {
+      <table class="posts-table">
+        <thead>
           <tr>
-            <td class="col-title">
-              <a [routerLink]="['/posts', post.slug]" target="_blank">{{ post.title }}</a>
-            </td>
-            <td class="col-date">{{ formatDate(post.createdAt) }}</td>
-            <td class="col-actions">
-              <button class="btn-edit" (click)="editPost(post)">Edit</button>
-              <button
-                class="btn-delete"
-                (click)="deletePost(post)"
-                [disabled]="deletingId() === post.id"
-              >
-                {{ deletingId() === post.id ? '…' : 'Delete' }}
-              </button>
-            </td>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th class="col-actions">Actions</th>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (post of filteredPosts(); track post.id) {
+            <tr>
+              <td class="col-title">
+                <a [routerLink]="['/posts', post.slug]">{{ post.title }}</a>
+              </td>
+              <td class="col-status">
+                <span class="badge-status" [attr.data-status]="post.status">{{ statusLabel(post.status) }}</span>
+              </td>
+              <td class="col-date">{{ formatDate(post.createdAt) }}</td>
+              <td class="col-actions">
+                <button class="btn-edit" (click)="editPost(post)">Edit</button>
+                <button
+                  class="btn-delete"
+                  (click)="deletePost(post)"
+                  [disabled]="deletingId() === post.id"
+                >
+                  {{ deletingId() === post.id ? '…' : 'Delete' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   }
 </main>

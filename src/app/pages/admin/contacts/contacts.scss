@@ -4,12 +4,41 @@
 }
 
 .contacts-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 
   h1 {
     font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: -0.02em;
+  }
+}
+
+.filter-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-btn {
+  background: none;
+  border: 1px solid var(--color-border);
+  padding: 0.3rem 0.85rem;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: all 0.15s;
+
+  &:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+  }
+
+  &.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
   }
 }
 
@@ -104,6 +133,11 @@
   margin-bottom: 1rem;
 }
 
+.submission-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .btn-mark-read {
   background: none;
   border: 1px solid var(--color-border);
@@ -118,6 +152,27 @@
   &:hover:not(:disabled) {
     background: var(--color-bg-secondary);
     color: var(--color-text);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-delete {
+  background: none;
+  border: 1px solid color-mix(in srgb, var(--color-danger) 30%, transparent);
+  padding: 0.3rem 0.75rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--color-danger);
+  transition: all 0.15s;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-danger) 8%, transparent);
   }
 
   &:disabled {

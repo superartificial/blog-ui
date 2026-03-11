@@ -26,4 +26,8 @@ export class ContactService {
   markAsRead(id: number) {
     return this.http.put(`${this.apiUrl}/contact/${id}/read`, {});
   }
+
+  deleteSubmission(id: number) {
+    return this.http.delete<void>(`${this.apiUrl}/contact/${id}`);
+  }
 }

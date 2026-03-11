@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { PostService } from '../../../services/post.service';
 import { PostSummary, formatPostDate } from '../../../models';
@@ -17,6 +17,12 @@ export class Dashboard {
   loading = signal(true);
   error = signal<string | null>(null);
   deletingId = signal<number | null>(null);
+  statusFilter = signal<string>('all');
+
+  filteredPosts = computed(() => {
+    const f = this.statusFilter();
+    return f === 'all' ? this.posts() : this.posts().filter((p) => p.status === f);
+  });
 
   constructor() {
     this.loadPosts();
@@ -24,7 +30,7 @@ export class Dashboard {
 
   private loadPosts() {
     this.loading.set(true);
-    this.postService.getPosts().subscribe({
+    this.postService.getAllPosts().subscribe({
       next: (posts) => {
         this.posts.set(posts);
         this.loading.set(false);
@@ -54,6 +60,16 @@ export class Dashboard {
         alert('Failed to delete post.');
       },
     });
+  }
+
+  statusLabel(status: string | undefined): string {
+    switch (status) {
+      case 'PUBLISHED': return 'Published';
+      case 'DRAFT': return 'Draft';
+      case 'AWAITING_REVIEW': return 'Awaiting review';
+      case 'ARCHIVED': return 'Archived';
+      default: return status ?? '';
+    }
   }
 
   formatDate(date: string | number[] | undefined): string {

@@ -44,7 +44,7 @@ export class Editor implements AfterViewInit, OnDestroy {
     excerpt: '',
     humanIntro: '',
     aiNotes: '',
-    published: false,
+    status: 'DRAFT',
   };
 
   constructor() {

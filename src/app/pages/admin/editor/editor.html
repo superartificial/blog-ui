@@ -58,11 +58,14 @@
       <textarea #aiNotesArea></textarea>
     </div>
 
-    <div class="field field-checkbox">
-      <label class="checkbox-label">
-        <input type="checkbox" [(ngModel)]="post.published" name="published" />
-        Publish immediately
-      </label>
+    <div class="field">
+      <label for="status">Status</label>
+      <select id="status" [(ngModel)]="post.status" name="status">
+        <option value="DRAFT">Draft</option>
+        <option value="AWAITING_REVIEW">Awaiting review</option>
+        <option value="PUBLISHED">Published</option>
+        <option value="ARCHIVED">Archived</option>
+      </select>
     </div>
 
     <div class="form-actions">

@@ -11,7 +11,18 @@
         <a routerLink="/">← Back to writing</a>
       </div>
     } @else if (post()) {
-      <a class="back-link" routerLink="/">← Writing</a>
+      <div class="post-top-bar">
+        <a class="back-link" routerLink="/">← Writing</a>
+        @if (authService.isLoggedIn()) {
+          <a class="btn-edit-post" [routerLink]="['/admin/edit', post()!.id]">Edit post</a>
+        }
+      </div>
+
+      @if (post()!.status && post()!.status !== 'PUBLISHED') {
+        <div class="post-status-banner" [attr.data-status]="post()!.status">
+          {{ statusLabel(post()!.status!) }}
+        </div>
+      }
 
       <article>
         <header class="post-header">
