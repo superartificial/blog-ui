@@ -1,0 +1,7 @@
+<div class="cta-block">
+  @if (heading) { <h2 class="cta-heading">{{ heading }}</h2> }
+  @if (body) { <p class="cta-body">{{ body }}</p> }
+  @if (buttonText && buttonUrl) {
+    <a class="cta-btn btn-primary" [routerLink]="buttonUrl">{{ buttonText }}</a>
+  }
+</div>

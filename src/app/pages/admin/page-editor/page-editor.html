@@ -1,0 +1,144 @@
+<main class="container page-editor-admin">
+  <header class="editor-header">
+    <h1>{{ isEditing() ? 'Edit page' : 'New page' }}</h1>
+    <a routerLink="/admin/pages" class="btn-cancel">← Pages</a>
+  </header>
+
+  @if (loading()) {
+    <div class="loading"><span class="spinner"></span></div>
+  } @else {
+
+    <!-- ── METADATA ─────────────────────────────────────────────────── -->
+    <section class="editor-section">
+      <h2 class="section-title">Page details</h2>
+
+      @if (metaError()) { <p class="error-msg">{{ metaError() }}</p> }
+      @if (metaSaved()) { <p class="success-msg">Saved.</p> }
+
+      <div class="meta-form">
+        <div class="field">
+          <label for="title">Title</label>
+          <input id="title" type="text" [(ngModel)]="title" (input)="onTitleChange()" name="title" placeholder="Page title" />
+        </div>
+        <div class="field">
+          <label for="slug">Slug</label>
+          <input id="slug" type="text" [(ngModel)]="slug" name="slug" placeholder="page-slug" />
+        </div>
+        <div class="field">
+          <label for="meta">Meta description <span class="optional">(optional)</span></label>
+          <input id="meta" type="text" [(ngModel)]="metaDescription" name="meta" placeholder="Used in search results" />
+        </div>
+        <div class="field">
+          <label for="og">OG image URL <span class="optional">(optional)</span></label>
+          <input id="og" type="text" [(ngModel)]="ogImageUrl" name="og" placeholder="https://…" />
+        </div>
+        <div class="field">
+          <label for="status">Status</label>
+          <select id="status" [(ngModel)]="status" name="status">
+            <option value="DRAFT">Draft</option>
+            <option value="AWAITING_REVIEW">Awaiting review</option>
+            <option value="PUBLISHED">Published</option>
+            <option value="ARCHIVED">Archived</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" (click)="saveMeta()" [disabled]="metaSaving()">
+            {{ metaSaving() ? 'Saving…' : isEditing() ? 'Save details' : 'Create page' }}
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BLOCKS ──────────────────────────────────────────────────── -->
+    @if (isEditing()) {
+      <section class="editor-section">
+        <h2 class="section-title">Content blocks</h2>
+
+        @if (blocks().length === 0) {
+          <p class="blocks-empty">No blocks yet. Add one below.</p>
+        } @else {
+          <div
+            cdkDropList
+            [cdkDropListData]="blocks()"
+            (cdkDropListDropped)="onDrop($event)"
+            class="block-list"
+          >
+            @for (block of blocks(); track block.id) {
+              <div class="block-item" cdkDrag>
+
+                <div class="block-item-header">
+                  <span class="drag-handle" cdkDragHandle title="Drag to reorder">⠿</span>
+                  <span class="block-type-badge">{{ blockLabel(block.blockType) }}</span>
+                  <span class="block-summary">{{ blockSummary(block) }}</span>
+                  <div class="block-actions">
+                    @if (editingBlockId() !== block.id) {
+                      <button class="btn-sm" (click)="editBlock(block)">Edit</button>
+                    }
+                    <button
+                      class="btn-sm btn-sm-danger"
+                      (click)="deleteBlock(block)"
+                      [disabled]="deletingBlockId() === block.id"
+                    >
+                      {{ deletingBlockId() === block.id ? '…' : 'Delete' }}
+                    </button>
+                  </div>
+                </div>
+
+                @if (editingBlockId() === block.id) {
+                  <div class="block-editor-body">
+                    @switch (block.blockType) {
+                      @case ('RICH_TEXT') {
+                        <app-rich-text-block-editor [content]="editingContent()" (contentChange)="editingContent.set($event)" />
+                      }
+                      @case ('HERO') {
+                        <app-hero-block-editor [content]="editingContent()" (contentChange)="editingContent.set($event)" />
+                      }
+                      @case ('IMAGE') {
+                        <app-image-block-editor [content]="editingContent()" (contentChange)="editingContent.set($event)" />
+                      }
+                      @case ('CTA') {
+                        <app-cta-block-editor [content]="editingContent()" (contentChange)="editingContent.set($event)" />
+                      }
+                      @case ('HTML') {
+                        <app-html-block-editor [content]="editingContent()" (contentChange)="editingContent.set($event)" />
+                      }
+                      @case ('DIVIDER') {
+                        <app-divider-block-editor [content]="editingContent()" (contentChange)="editingContent.set($event)" />
+                      }
+                      @case ('BLOG_FEED') {
+                        <p class="blog-feed-note">Blog feed — shows latest {{ editingContent()['limit'] ?? 3 }} published posts automatically.</p>
+                      }
+                    }
+                    <div class="block-editor-actions">
+                      <button class="btn-primary btn-sm-save" (click)="saveBlock(block)" [disabled]="savingBlockId() === block.id">
+                        {{ savingBlockId() === block.id ? 'Saving…' : 'Save block' }}
+                      </button>
+                      <button class="btn-cancel" (click)="cancelEdit()">Cancel</button>
+                    </div>
+                  </div>
+                }
+
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Add block toolbar -->
+        <div class="add-block-bar">
+          <span class="add-block-label">Add block:</span>
+          @for (type of blockTypes; track type) {
+            <button
+              class="btn-add-block"
+              (click)="addBlock(type)"
+              [disabled]="addingType() !== null"
+            >
+              {{ addingType() === type ? '…' : blockLabel(type) }}
+            </button>
+          }
+        </div>
+
+      </section>
+    }
+
+  }
+</main>

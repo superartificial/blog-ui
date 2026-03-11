@@ -4,18 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PostService } from '../../services/post.service';
 import { AuthService } from '../../services/auth.service';
 import { Post, formatPostDate } from '../../models';
-import { marked } from 'marked';
-import { markedHighlight } from 'marked-highlight';
-import hljs from 'highlight.js';
-import DOMPurify from 'dompurify';
-
-marked.use(markedHighlight({
-  langPrefix: 'hljs language-',
-  highlight(code, lang) {
-    const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-    return hljs.highlight(code, { language }).value;
-  },
-}));
+import { renderMarkdown } from '../../utils/markdown';
 
 @Component({
   selector: 'app-post',
@@ -41,15 +30,12 @@ export class PostPage {
     this.postService.getPost(slug).subscribe({
       next: (post) => {
         this.post.set(post);
-        const html = marked.parse(post.content ?? '') as string;
-        this.renderedContent.set(this.sanitizer.bypassSecurityTrustHtml(DOMPurify.sanitize(html)));
+        this.renderedContent.set(this.sanitizer.bypassSecurityTrustHtml(renderMarkdown(post.content ?? '')));
         if (post.humanIntro?.trim()) {
-          const introHtml = marked.parse(post.humanIntro) as string;
-          this.renderedHumanIntro.set(this.sanitizer.bypassSecurityTrustHtml(DOMPurify.sanitize(introHtml)));
+          this.renderedHumanIntro.set(this.sanitizer.bypassSecurityTrustHtml(renderMarkdown(post.humanIntro)));
         }
         if (post.aiNotes?.trim()) {
-          const notesHtml = marked.parse(post.aiNotes) as string;
-          this.renderedAiNotes.set(this.sanitizer.bypassSecurityTrustHtml(DOMPurify.sanitize(notesHtml)));
+          this.renderedAiNotes.set(this.sanitizer.bypassSecurityTrustHtml(renderMarkdown(post.aiNotes)));
         }
         this.loading.set(false);
       },

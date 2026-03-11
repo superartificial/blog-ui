@@ -45,17 +45,29 @@
 
     <div class="field field-content">
       <label>Author's note <span class="optional">(optional — shown before the article)</span></label>
-      <textarea #humanIntroArea></textarea>
+      <app-markdown-editor
+        name="humanIntro"
+        [(ngModel)]="post.humanIntro"
+        minHeight="150px"
+      />
     </div>
 
     <div class="field field-content">
       <label>Content</label>
-      <textarea #contentArea></textarea>
+      <app-markdown-editor
+        name="content"
+        [(ngModel)]="post.content"
+        [imageUploadFn]="imageUploadFn"
+      />
     </div>
 
     <div class="field field-content">
       <label>How this was made <span class="optional">(optional — shown after the article)</span></label>
-      <textarea #aiNotesArea></textarea>
+      <app-markdown-editor
+        name="aiNotes"
+        [(ngModel)]="post.aiNotes"
+        minHeight="150px"
+      />
     </div>
 
     <div class="field">

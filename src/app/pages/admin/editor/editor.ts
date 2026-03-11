@@ -1,37 +1,22 @@
-import { Component, inject, signal, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PostService } from '../../../services/post.service';
 import { ImageService } from '../../../services/image.service';
 import { Post } from '../../../models';
-import EasyMDE from 'easymde';
-
-const SECONDARY_TOOLBAR: EasyMDE.Options['toolbar'] = [
-  'bold', 'italic', 'heading', '|',
-  'quote', 'code', 'unordered-list', 'ordered-list', '|',
-  'link', '|',
-  'preview', 'side-by-side',
-];
+import { MarkdownEditor } from '../../../components/markdown-editor/markdown-editor';
 
 @Component({
   selector: 'app-editor',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, MarkdownEditor],
   templateUrl: './editor.html',
   styleUrl: './editor.scss',
 })
-export class Editor implements AfterViewInit, OnDestroy {
-  @ViewChild('contentArea') contentAreaRef!: ElementRef<HTMLTextAreaElement>;
-  @ViewChild('humanIntroArea') humanIntroAreaRef!: ElementRef<HTMLTextAreaElement>;
-  @ViewChild('aiNotesArea') aiNotesAreaRef!: ElementRef<HTMLTextAreaElement>;
-
+export class Editor {
   private postService = inject(PostService);
   private imageService = inject(ImageService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-
-  private mde: EasyMDE | null = null;
-  private humanIntroMde: EasyMDE | null = null;
-  private aiNotesMde: EasyMDE | null = null;
 
   isEditing = signal(false);
   loading = signal(false);
@@ -47,6 +32,17 @@ export class Editor implements AfterViewInit, OnDestroy {
     status: 'DRAFT',
   };
 
+  readonly imageUploadFn = (
+    file: File,
+    onSuccess: (url: string) => void,
+    onError: (error: string) => void
+  ) => {
+    this.imageService.upload(file).subscribe({
+      next: (url) => onSuccess(url),
+      error: () => onError('Image upload failed'),
+    });
+  };
+
   constructor() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -55,70 +51,11 @@ export class Editor implements AfterViewInit, OnDestroy {
       this.postService.getPostById(+id).subscribe({
         next: (post: Post) => {
           this.post = post;
-          this.mde?.value(post.content ?? '');
-          this.humanIntroMde?.value(post.humanIntro ?? '');
-          this.aiNotesMde?.value(post.aiNotes ?? '');
           this.loading.set(false);
         },
         error: () => this.router.navigate(['/admin']),
       });
     }
-  }
-
-  ngAfterViewInit() {
-    this.mde = new EasyMDE({
-      element: this.contentAreaRef.nativeElement,
-      spellChecker: false,
-      autofocus: false,
-      toolbar: [
-        'bold', 'italic', 'heading', '|',
-        'quote', 'code', 'unordered-list', 'ordered-list', '|',
-        'link', 'upload-image', '|',
-        'preview', 'side-by-side', 'fullscreen', '|',
-        'guide',
-      ],
-      imageUploadFunction: (file, onSuccess, onError) => {
-        this.imageService.upload(file).subscribe({
-          next: (url) => onSuccess(url),
-          error: () => onError('Image upload failed'),
-        });
-      },
-    });
-
-    this.humanIntroMde = new EasyMDE({
-      element: this.humanIntroAreaRef.nativeElement,
-      spellChecker: false,
-      autofocus: false,
-      toolbar: SECONDARY_TOOLBAR,
-      minHeight: '150px',
-    });
-
-    this.aiNotesMde = new EasyMDE({
-      element: this.aiNotesAreaRef.nativeElement,
-      spellChecker: false,
-      autofocus: false,
-      toolbar: SECONDARY_TOOLBAR,
-      minHeight: '150px',
-    });
-
-    if (this.post.content) {
-      this.mde.value(this.post.content);
-    }
-    if (this.post.humanIntro) {
-      this.humanIntroMde.value(this.post.humanIntro);
-    }
-    if (this.post.aiNotes) {
-      this.aiNotesMde.value(this.post.aiNotes);
-    }
-  }
-
-  ngOnDestroy() {
-    this.mde?.toTextArea();
-    this.mde = null;
-    this.humanIntroMde?.toTextArea();
-    this.humanIntroMde = null;
-    this.aiNotesMde?.toTextArea();
-    this.aiNotesMde = null;
   }
 
   onTitleChange() {
@@ -137,15 +74,11 @@ export class Editor implements AfterViewInit, OnDestroy {
   }
 
   save() {
-    const content = this.mde?.value() ?? '';
-    if (!this.post.title.trim() || !this.post.slug.trim() || !content.trim()) {
+    if (!this.post.title.trim() || !this.post.slug.trim() || !this.post.content?.trim()) {
       this.error.set('Title, slug, and content are required.');
       return;
     }
 
-    this.post.content = content;
-    this.post.humanIntro = this.humanIntroMde?.value() ?? '';
-    this.post.aiNotes = this.aiNotesMde?.value() ?? '';
     this.loading.set(true);
     this.error.set(null);
 

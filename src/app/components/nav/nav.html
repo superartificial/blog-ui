@@ -4,7 +4,8 @@
     <div class="nav-links">
       <a routerLink="/contact" routerLinkActive="active">Contact</a>
       @if (authService.isLoggedIn()) {
-        <a routerLink="/admin" routerLinkActive="active">Admin</a>
+        <a routerLink="/admin" routerLinkActive="active">Posts</a>
+        <a routerLink="/admin/pages" routerLinkActive="active">Pages</a>
         <a routerLink="/admin/contacts" routerLinkActive="active">Contacts</a>
         <button class="btn-logout" (click)="authService.logout()">Logout</button>
       } @else {

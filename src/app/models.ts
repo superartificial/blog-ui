@@ -1,3 +1,28 @@
+export type PostStatus = 'DRAFT' | 'AWAITING_REVIEW' | 'PUBLISHED' | 'ARCHIVED';
+export type BlockType = 'RICH_TEXT' | 'HTML' | 'HERO' | 'IMAGE' | 'DIVIDER' | 'CTA' | 'BLOG_FEED';
+
+export interface ContentBlock {
+  id: number;
+  blockType: BlockType;
+  sortOrder: number;
+  content: Record<string, unknown>;
+}
+
+export interface PageSummary {
+  id: number;
+  slug: string;
+  title: string;
+  metaDescription?: string;
+  status: PostStatus;
+  createdAt?: string | number[];
+  updatedAt?: string | number[];
+}
+
+export interface Page extends PageSummary {
+  ogImageUrl?: string;
+  blocks: ContentBlock[];
+}
+
 export interface PostSummary {
   id?: number;
   title: string;

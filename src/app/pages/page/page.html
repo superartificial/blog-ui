@@ -1,0 +1,16 @@
+@if (loading()) {
+  <div class="page-loading container"><span class="spinner"></span></div>
+} @else if (notFound()) {
+  <div class="page-not-found container">
+    <h1>Page not found</h1>
+    <a routerLink="/">Go home</a>
+  </div>
+} @else if (page()) {
+  <div class="page-content">
+    @for (block of page()!.blocks; track block.id) {
+      <section class="block-section">
+        <app-block-renderer [block]="block" />
+      </section>
+    }
+  </div>
+}

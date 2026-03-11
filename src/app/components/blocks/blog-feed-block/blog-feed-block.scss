@@ -1,0 +1,27 @@
+.blog-feed-block {
+  max-width: var(--width-wide);
+  margin: 0 auto;
+}
+
+.feed-heading {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.feed-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.feed-loading {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.feed-empty {
+  color: var(--color-text-muted);
+}

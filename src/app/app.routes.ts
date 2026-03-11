@@ -39,6 +39,25 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/admin/contacts/contacts').then((m) => m.Contacts),
   },
   {
+    path: 'admin/pages',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/admin/pages-admin/pages-admin').then((m) => m.PagesAdmin),
+  },
+  {
+    path: 'admin/pages/new',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/admin/page-editor/page-editor').then((m) => m.PageEditor),
+  },
+  {
+    path: 'admin/pages/edit/:id',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/admin/page-editor/page-editor').then((m) => m.PageEditor),
+  },
+  {
+    path: 'pages/:slug',
+    loadComponent: () => import('./pages/page/page').then((m) => m.PagePage),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

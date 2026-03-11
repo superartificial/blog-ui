@@ -1,0 +1,22 @@
+<div class="block-editor-fields">
+  <div class="block-editor-field">
+    <label>Title</label>
+    <input type="text" [(ngModel)]="title" (ngModelChange)="emit()" name="title" placeholder="Hero title" />
+  </div>
+  <div class="block-editor-field">
+    <label>Subtitle</label>
+    <input type="text" [(ngModel)]="subtitle" (ngModelChange)="emit()" name="subtitle" placeholder="Subtitle text" />
+  </div>
+  <div class="block-editor-field">
+    <label>Background image URL <span class="optional">(optional)</span></label>
+    <input type="text" [(ngModel)]="bgImageUrl" (ngModelChange)="emit()" name="bgImageUrl" placeholder="https://…" />
+  </div>
+  <div class="block-editor-field">
+    <label>CTA button text <span class="optional">(optional)</span></label>
+    <input type="text" [(ngModel)]="ctaText" (ngModelChange)="emit()" name="ctaText" placeholder="e.g. Read the blog" />
+  </div>
+  <div class="block-editor-field">
+    <label>CTA button URL <span class="optional">(optional)</span></label>
+    <input type="text" [(ngModel)]="ctaUrl" (ngModelChange)="emit()" name="ctaUrl" placeholder="/posts" />
+  </div>
+</div>

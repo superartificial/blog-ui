@@ -1,0 +1,51 @@
+<main class="container pages-admin">
+  <header class="pages-header">
+    <h1>Pages</h1>
+    <a routerLink="/admin/pages/new" class="btn-primary">New page</a>
+  </header>
+
+  @if (loading()) {
+    <div class="loading"><span class="spinner"></span></div>
+  } @else if (error()) {
+    <p class="error-msg">{{ error() }}</p>
+  } @else if (pages().length === 0) {
+    <div class="empty-state">
+      <p>No pages yet.</p>
+      <a routerLink="/admin/pages/new" class="btn-primary">Create your first page</a>
+    </div>
+  } @else {
+    <table class="pages-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Slug</th>
+          <th>Status</th>
+          <th>Updated</th>
+          <th class="col-actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (page of pages(); track page.id) {
+          <tr>
+            <td class="col-title">{{ page.title }}</td>
+            <td class="col-slug">/pages/{{ page.slug }}</td>
+            <td class="col-status">
+              <span class="badge-status" [attr.data-status]="page.status">{{ statusLabel(page.status) }}</span>
+            </td>
+            <td class="col-date">{{ formatDate(page.updatedAt) }}</td>
+            <td class="col-actions">
+              <button class="btn-edit" (click)="editPage(page)">Edit</button>
+              <button
+                class="btn-delete"
+                (click)="deletePage(page)"
+                [disabled]="deletingId() === page.id"
+              >
+                {{ deletingId() === page.id ? '…' : 'Delete' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</main>
