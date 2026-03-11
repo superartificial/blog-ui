@@ -10,6 +10,8 @@ export interface PostSummary {
 
 export interface Post extends PostSummary {
   content: string;
+  humanIntro?: string;
+  aiNotes?: string;
 }
 
 export interface ContactSubmission {

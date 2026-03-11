@@ -55,6 +55,99 @@
   }
 }
 
+/* AUTHOR NOTE & AI NOTES — shared aside style */
+
+.author-note,
+.ai-notes {
+  border: 2px dashed var(--color-border);
+  background: var(--color-bg-secondary);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.author-note {
+  margin: 0 0 2.5rem;
+}
+
+.ai-notes {
+  margin: 3rem 0 0;
+}
+
+.author-note__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.ai-notes__header {
+  margin-bottom: 0.75rem;
+}
+
+.author-note__label,
+.ai-notes__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.author-note__jump {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+}
+
+::ng-deep .author-note__body,
+::ng-deep .ai-notes__body {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-text);
+
+  p { margin-bottom: 1rem; }
+  p:last-child { margin-bottom: 0; }
+
+  a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  code {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 0.875em;
+    background: var(--color-bg);
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+    color: var(--color-accent);
+  }
+
+  pre {
+    background: var(--color-bg-header);
+    color: #e0e0e0;
+    padding: 1rem 1.25rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
+
+    code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+  }
+}
+
 /* ARTICLE HEADER */
 
 .post-header {

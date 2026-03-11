@@ -146,6 +146,12 @@
   }
 }
 
+.field-secondary {
+  .EasyMDEContainer .CodeMirror {
+    min-height: 150px;
+  }
+}
+
 .field-checkbox {
   .checkbox-label {
     display: flex;

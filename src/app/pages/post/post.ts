@@ -29,6 +29,8 @@ export class PostPage {
 
   post = signal<Post | null>(null);
   renderedContent = signal<SafeHtml>('');
+  renderedHumanIntro = signal<SafeHtml | null>(null);
+  renderedAiNotes = signal<SafeHtml | null>(null);
   loading = signal(true);
   notFound = signal(false);
 
@@ -38,8 +40,15 @@ export class PostPage {
       next: (post) => {
         this.post.set(post);
         const html = marked.parse(post.content ?? '') as string;
-        const clean = DOMPurify.sanitize(html);
-        this.renderedContent.set(this.sanitizer.bypassSecurityTrustHtml(clean));
+        this.renderedContent.set(this.sanitizer.bypassSecurityTrustHtml(DOMPurify.sanitize(html)));
+        if (post.humanIntro?.trim()) {
+          const introHtml = marked.parse(post.humanIntro) as string;
+          this.renderedHumanIntro.set(this.sanitizer.bypassSecurityTrustHtml(DOMPurify.sanitize(introHtml)));
+        }
+        if (post.aiNotes?.trim()) {
+          const notesHtml = marked.parse(post.aiNotes) as string;
+          this.renderedAiNotes.set(this.sanitizer.bypassSecurityTrustHtml(DOMPurify.sanitize(notesHtml)));
+        }
         this.loading.set(false);
       },
       error: (err) => {
@@ -51,5 +60,9 @@ export class PostPage {
 
   formatDate(date: string | number[] | undefined): string {
     return formatPostDate(date);
+  }
+
+  scrollTo(id: string) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   }
 }

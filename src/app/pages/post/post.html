@@ -23,7 +23,29 @@
           </div>
           <h1 class="post-title">{{ post()!.title }}</h1>
         </header>
+
+        @if (renderedHumanIntro()) {
+          <aside class="author-note">
+            <div class="author-note__header">
+              <span class="author-note__label">A note from the author</span>
+              @if (renderedAiNotes()) {
+                <a (click)="scrollTo('how-this-was-made')" class="author-note__jump">How this was made ↓</a>
+              }
+            </div>
+            <div class="author-note__body" [innerHTML]="renderedHumanIntro()"></div>
+          </aside>
+        }
+
         <div class="post-content" [innerHTML]="renderedContent()"></div>
+
+        @if (renderedAiNotes()) {
+          <aside class="ai-notes" id="how-this-was-made">
+            <div class="ai-notes__header">
+              <span class="ai-notes__label">How this article was made</span>
+            </div>
+            <div class="ai-notes__body" [innerHTML]="renderedAiNotes()"></div>
+          </aside>
+        }
       </article>
 
       <footer class="post-footer">

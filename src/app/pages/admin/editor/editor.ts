@@ -6,6 +6,13 @@ import { ImageService } from '../../../services/image.service';
 import { Post } from '../../../models';
 import EasyMDE from 'easymde';
 
+const SECONDARY_TOOLBAR: EasyMDE.Options['toolbar'] = [
+  'bold', 'italic', 'heading', '|',
+  'quote', 'code', 'unordered-list', 'ordered-list', '|',
+  'link', '|',
+  'preview', 'side-by-side',
+];
+
 @Component({
   selector: 'app-editor',
   imports: [FormsModule, RouterLink],
@@ -14,6 +21,8 @@ import EasyMDE from 'easymde';
 })
 export class Editor implements AfterViewInit, OnDestroy {
   @ViewChild('contentArea') contentAreaRef!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('humanIntroArea') humanIntroAreaRef!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('aiNotesArea') aiNotesAreaRef!: ElementRef<HTMLTextAreaElement>;
 
   private postService = inject(PostService);
   private imageService = inject(ImageService);
@@ -21,6 +30,8 @@ export class Editor implements AfterViewInit, OnDestroy {
   private route = inject(ActivatedRoute);
 
   private mde: EasyMDE | null = null;
+  private humanIntroMde: EasyMDE | null = null;
+  private aiNotesMde: EasyMDE | null = null;
 
   isEditing = signal(false);
   loading = signal(false);
@@ -31,6 +42,8 @@ export class Editor implements AfterViewInit, OnDestroy {
     slug: '',
     content: '',
     excerpt: '',
+    humanIntro: '',
+    aiNotes: '',
     published: false,
   };
 
@@ -43,6 +56,8 @@ export class Editor implements AfterViewInit, OnDestroy {
         next: (post: Post) => {
           this.post = post;
           this.mde?.value(post.content ?? '');
+          this.humanIntroMde?.value(post.humanIntro ?? '');
+          this.aiNotesMde?.value(post.aiNotes ?? '');
           this.loading.set(false);
         },
         error: () => this.router.navigate(['/admin']),
@@ -70,14 +85,40 @@ export class Editor implements AfterViewInit, OnDestroy {
       },
     });
 
+    this.humanIntroMde = new EasyMDE({
+      element: this.humanIntroAreaRef.nativeElement,
+      spellChecker: false,
+      autofocus: false,
+      toolbar: SECONDARY_TOOLBAR,
+      minHeight: '150px',
+    });
+
+    this.aiNotesMde = new EasyMDE({
+      element: this.aiNotesAreaRef.nativeElement,
+      spellChecker: false,
+      autofocus: false,
+      toolbar: SECONDARY_TOOLBAR,
+      minHeight: '150px',
+    });
+
     if (this.post.content) {
       this.mde.value(this.post.content);
+    }
+    if (this.post.humanIntro) {
+      this.humanIntroMde.value(this.post.humanIntro);
+    }
+    if (this.post.aiNotes) {
+      this.aiNotesMde.value(this.post.aiNotes);
     }
   }
 
   ngOnDestroy() {
     this.mde?.toTextArea();
     this.mde = null;
+    this.humanIntroMde?.toTextArea();
+    this.humanIntroMde = null;
+    this.aiNotesMde?.toTextArea();
+    this.aiNotesMde = null;
   }
 
   onTitleChange() {
@@ -103,6 +144,8 @@ export class Editor implements AfterViewInit, OnDestroy {
     }
 
     this.post.content = content;
+    this.post.humanIntro = this.humanIntroMde?.value() ?? '';
+    this.post.aiNotes = this.aiNotesMde?.value() ?? '';
     this.loading.set(true);
     this.error.set(null);
 
