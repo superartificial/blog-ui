@@ -1,7 +1,7 @@
 <div class="image-picker">
   @if (url) {
     <div class="image-preview">
-      <img [src]="url" [alt]="label" />
+      <img [src]="thumbnailUrl() || url" [alt]="label" />
       <button class="btn-remove" type="button" (click)="clear()" title="Remove image">✕</button>
     </div>
   }

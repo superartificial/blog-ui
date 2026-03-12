@@ -15,7 +15,7 @@
       @for (img of images(); track img.id) {
         <div class="image-card" [class.orphan]="img.referenceCount === 0">
           <div class="image-thumb">
-            <img [src]="img.url" [alt]="img.filename" loading="lazy" />
+            <img [src]="img.thumbnailUrl || img.url" [alt]="img.filename" loading="lazy" />
           </div>
           <div class="image-info">
             <p class="image-filename" [title]="img.filename">{{ img.filename }}</p>

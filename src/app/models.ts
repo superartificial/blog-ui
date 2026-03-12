@@ -4,6 +4,7 @@ export interface ImageItem {
   id: number;
   filename: string;
   url: string;
+  thumbnailUrl?: string;
   mimeType?: string;
   sizeBytes?: number;
   uploadedAt?: string | number[];

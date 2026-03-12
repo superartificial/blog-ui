@@ -15,6 +15,8 @@ export class ImagePicker {
 
   uploading = signal(false);
   error = signal<string | null>(null);
+  /** Thumbnail URL — set after a fresh upload; used for the preview img to avoid loading a large image. */
+  thumbnailUrl = signal<string>('');
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -27,6 +29,7 @@ export class ImagePicker {
     this.imageService.upload(file).subscribe({
       next: (img) => {
         this.uploading.set(false);
+        this.thumbnailUrl.set(img.thumbnailUrl ?? '');
         this.urlChange.emit(img.url);
       },
       error: () => {
@@ -37,6 +40,7 @@ export class ImagePicker {
   }
 
   clear() {
+    this.thumbnailUrl.set('');
     this.urlChange.emit('');
   }
 }
