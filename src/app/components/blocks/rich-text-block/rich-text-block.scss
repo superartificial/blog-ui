@@ -1,4 +1,11 @@
 .rich-text-block {
   max-width: var(--width-content);
   margin: 0 auto;
+
+  ::ng-deep img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    display: block;
+  }
 }

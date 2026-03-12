@@ -1,14 +1,15 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ImagePicker } from '../../image-picker/image-picker';
 
 @Component({
   selector: 'app-image-block-editor',
-  imports: [FormsModule],
+  imports: [FormsModule, ImagePicker],
   template: `
     <div class="block-editor-fields">
       <div class="block-editor-field">
-        <label>Image URL</label>
-        <input type="text" [(ngModel)]="url" (ngModelChange)="emit()" name="url" placeholder="https://…" />
+        <label>Image</label>
+        <app-image-picker [url]="url" (urlChange)="url = $event; emit()" label="Block image" />
       </div>
       <div class="block-editor-field">
         <label>Alt text</label>

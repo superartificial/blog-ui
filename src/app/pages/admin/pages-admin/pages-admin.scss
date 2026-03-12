@@ -52,6 +52,16 @@
   }
 }
 
+.col-title a {
+  color: var(--color-text);
+  font-weight: 500;
+
+  &:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+}
+
 .col-slug {
   font-family: monospace;
   font-size: 0.8rem;

@@ -8,8 +8,8 @@
     <input type="text" [(ngModel)]="subtitle" (ngModelChange)="emit()" name="subtitle" placeholder="Subtitle text" />
   </div>
   <div class="block-editor-field">
-    <label>Background image URL <span class="optional">(optional)</span></label>
-    <input type="text" [(ngModel)]="bgImageUrl" (ngModelChange)="emit()" name="bgImageUrl" placeholder="https://…" />
+    <label>Background image <span class="optional">(optional)</span></label>
+    <app-image-picker [url]="bgImageUrl" (urlChange)="bgImageUrl = $event; emit()" label="Hero background" />
   </div>
   <div class="block-editor-field">
     <label>CTA button text <span class="optional">(optional)</span></label>

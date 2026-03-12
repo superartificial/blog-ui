@@ -1,3 +1,88 @@
+/* ── Split layout ────────────────────────────────────────────────────── */
+
+// main nav (3.25rem) + admin bar (2rem)
+$nav-h: 5.25rem;
+
+.editor-layout {
+  min-height: calc(100dvh - $nav-h);
+
+  &.split-mode {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+
+    .editor-pane {
+      width: 50%;
+      height: calc(100dvh - $nav-h);
+      overflow-y: auto;
+      border-right: 1px solid var(--color-border);
+    }
+  }
+}
+
+.preview-pane {
+  width: 50%;
+  position: sticky;
+  top: $nav-h;
+  height: calc(100dvh - $nav-h);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-secondary);
+}
+
+.preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.75rem;
+  height: 2.25rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+  flex-shrink: 0;
+}
+
+.preview-url {
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.preview-bar-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.btn-preview-action {
+  background: none;
+  border: 1px solid var(--color-border);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: all 0.15s;
+
+  &:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+  }
+}
+
+.btn-preview-close {
+  font-size: 0.85rem;
+  padding: 0.15rem 0.55rem;
+}
+
+.preview-iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: var(--color-bg);
+}
+
+/* ── Editor ──────────────────────────────────────────────────────────── */
+
 .page-editor-admin {
   max-width: var(--max-width);
   padding-top: 2rem;
@@ -11,6 +96,30 @@
   margin-bottom: 2rem;
 
   h1 { font-size: 1.5rem; }
+}
+
+.editor-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-view-page {
+  background: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  padding: 0.3rem 0.75rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+  }
 }
 
 .editor-section {

@@ -49,18 +49,59 @@
   }
 }
 
-.btn-logout {
+.admin-bar {
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-bar-inner {
+  max-width: var(--width-wide);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+
+  a {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.15s;
+
+    &:hover,
+    &.active {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+  }
+}
+
+.admin-bar-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  opacity: 0.5;
+  margin-right: 0.25rem;
+}
+
+.btn-admin-logout {
   background: none;
   border: none;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
   font-family: inherit;
-  color: rgba(255, 255, 255, 0.55);
-  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   cursor: pointer;
   padding: 0;
   transition: color 0.15s;
+  margin-left: auto;
 
   &:hover {
     color: var(--color-danger);

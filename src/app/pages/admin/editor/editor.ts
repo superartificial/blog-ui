@@ -38,7 +38,7 @@ export class Editor {
     onError: (error: string) => void
   ) => {
     this.imageService.upload(file).subscribe({
-      next: (url) => onSuccess(url),
+      next: (img) => onSuccess(img.url),
       error: () => onError('Image upload failed'),
     });
   };

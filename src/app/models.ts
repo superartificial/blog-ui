@@ -1,4 +1,14 @@
 export type PostStatus = 'DRAFT' | 'AWAITING_REVIEW' | 'PUBLISHED' | 'ARCHIVED';
+
+export interface ImageItem {
+  id: number;
+  filename: string;
+  url: string;
+  mimeType?: string;
+  sizeBytes?: number;
+  uploadedAt?: string | number[];
+  referenceCount: number;
+}
 export type BlockType = 'RICH_TEXT' | 'HTML' | 'HERO' | 'IMAGE' | 'DIVIDER' | 'CTA' | 'BLOG_FEED';
 
 export interface ContentBlock {

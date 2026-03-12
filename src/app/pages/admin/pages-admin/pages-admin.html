@@ -27,7 +27,9 @@
       <tbody>
         @for (page of pages(); track page.id) {
           <tr>
-            <td class="col-title">{{ page.title }}</td>
+            <td class="col-title">
+              <a [routerLink]="['/pages', page.slug]" [queryParams]="{ id: page.id }">{{ page.title }}</a>
+            </td>
             <td class="col-slug">/pages/{{ page.slug }}</td>
             <td class="col-status">
               <span class="badge-status" [attr.data-status]="page.status">{{ statusLabel(page.status) }}</span>

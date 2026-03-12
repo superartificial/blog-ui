@@ -1,0 +1,39 @@
+<main class="container images-admin">
+  <header class="images-header">
+    <h1>Media library</h1>
+    <p class="images-subtitle">All uploaded images. Orphaned images (0 references) can be safely deleted.</p>
+  </header>
+
+  @if (loading()) {
+    <div class="loading"><span class="spinner"></span></div>
+  } @else if (error()) {
+    <p class="error-msg">{{ error() }}</p>
+  } @else if (images().length === 0) {
+    <div class="empty-state"><p>No images uploaded yet.</p></div>
+  } @else {
+    <div class="images-grid">
+      @for (img of images(); track img.id) {
+        <div class="image-card" [class.orphan]="img.referenceCount === 0">
+          <div class="image-thumb">
+            <img [src]="img.url" [alt]="img.filename" loading="lazy" />
+          </div>
+          <div class="image-info">
+            <p class="image-filename" [title]="img.filename">{{ img.filename }}</p>
+            <p class="image-meta">{{ formatSize(img.sizeBytes) }} · {{ formatDate(img.uploadedAt) }}</p>
+            <p class="image-refs" [class.no-refs]="img.referenceCount === 0">
+              {{ img.referenceCount === 0 ? 'Orphaned — not in use' : img.referenceCount + ' reference' + (img.referenceCount === 1 ? '' : 's') }}
+            </p>
+          </div>
+          <div class="image-actions">
+            <a [href]="img.url" target="_blank" rel="noopener" class="btn-view">View</a>
+            <button
+              class="btn-delete"
+              (click)="deleteImage(img)"
+              [disabled]="deletingId() === img.id"
+            >{{ deletingId() === img.id ? '…' : 'Delete' }}</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</main>

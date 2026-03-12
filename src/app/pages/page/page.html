@@ -6,11 +6,33 @@
     <a routerLink="/">Go home</a>
   </div>
 } @else if (page()) {
-  <div class="page-content">
-    @for (block of page()!.blocks; track block.id) {
-      <section class="block-section">
-        <app-block-renderer [block]="block" />
-      </section>
-    }
+  <div class="page-wrap">
+    <div class="container container--narrow">
+
+      @if (!isPreview() && authService.isLoggedIn()) {
+        <div class="page-top-bar">
+          <a class="btn-edit-page" [routerLink]="['/admin/pages/edit', page()!.id]">Edit page</a>
+        </div>
+      }
+
+      @if (page()!.status && page()!.status !== 'PUBLISHED') {
+        <div class="page-status-banner" [attr.data-status]="page()!.status">
+          {{ page()!.status }} — not publicly visible
+        </div>
+      }
+
+      <header class="page-header">
+        <h1 class="page-title">{{ page()!.title }}</h1>
+      </header>
+
+    </div>
+
+    <div class="page-content">
+      @for (block of page()!.blocks; track block.id) {
+        <section class="block-section">
+          <app-block-renderer [block]="block" />
+        </section>
+      }
+    </div>
   </div>
 }

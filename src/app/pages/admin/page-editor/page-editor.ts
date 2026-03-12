@@ -1,9 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CdkDragDrop, CdkDropList, CdkDrag, CdkDragHandle, moveItemInArray } from '@angular/cdk/drag-drop';
 import { PageService } from '../../../services/page.service';
 import { Page, ContentBlock, BlockType } from '../../../models';
+import { ImagePicker } from '../../../components/image-picker/image-picker';
 import { RichTextBlockEditor } from '../../../components/block-editors/rich-text-block-editor/rich-text-block-editor';
 import { HeroBlockEditor } from '../../../components/block-editors/hero-block-editor/hero-block-editor';
 import { ImageBlockEditor } from '../../../components/block-editors/image-block-editor/image-block-editor';
@@ -36,6 +38,7 @@ const EMPTY_CONTENT: Record<BlockType, Record<string, unknown>> = {
   imports: [
     FormsModule, RouterLink,
     CdkDropList, CdkDrag, CdkDragHandle,
+    ImagePicker,
     RichTextBlockEditor, HeroBlockEditor, ImageBlockEditor,
     CtaBlockEditor, HtmlBlockEditor, DividerBlockEditor,
   ],
@@ -46,6 +49,7 @@ export class PageEditor {
   private pageService = inject(PageService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private sanitizer = inject(DomSanitizer);
 
   readonly blockTypes = Object.keys(BLOCK_LABELS) as BlockType[];
   readonly blockLabels = BLOCK_LABELS;
@@ -76,6 +80,20 @@ export class PageEditor {
 
   loading = signal(true);
   loadError = signal<string | null>(null);
+
+  // ── Preview pane ─────────────────────────────────────────────────────────
+
+  showPreview = signal(false);
+  previewKey = signal(0);
+
+  previewUrl = computed((): SafeResourceUrl => {
+    const p = this.page();
+    const key = this.previewKey();
+    if (!p) return this.sanitizer.bypassSecurityTrustResourceUrl('about:blank');
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
+      `/pages/${this.slug}?id=${p.id}&preview=true&_t=${key}`
+    );
+  });
 
   constructor() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -136,7 +154,12 @@ export class PageEditor {
 
     if (this.isEditing()) {
       this.pageService.updatePage(this.page()!.id, req).subscribe({
-        next: (page) => { this.page.set(page); this.metaSaving.set(false); this.metaSaved.set(true); },
+        next: (page) => {
+          this.page.set(page);
+          this.metaSaving.set(false);
+          this.metaSaved.set(true);
+          if (this.showPreview()) this.previewKey.update((k) => k + 1);
+        },
         error: (err) => {
           this.metaError.set(err.error?.error ?? 'Failed to save.');
           this.metaSaving.set(false);
@@ -196,6 +219,7 @@ export class PageEditor {
         this.blocks.update((list) => list.map((b) => b.id === updated.id ? updated : b));
         this.editingBlockId.set(null);
         this.savingBlockId.set(null);
+        if (this.showPreview()) this.previewKey.update((k) => k + 1);
       },
       error: () => this.savingBlockId.set(null),
     });
@@ -236,7 +260,7 @@ export class PageEditor {
     switch (block.blockType) {
       case 'RICH_TEXT': return ((c['body'] as string) ?? '').slice(0, 80) || '(empty)';
       case 'HERO': return (c['title'] as string) || '(no title)';
-      case 'IMAGE': return (c['url'] as string) || '(no URL)';
+      case 'IMAGE': return (c['alt'] as string) || (c['caption'] as string) || '';
       case 'HTML': return ((c['html'] as string) ?? '').slice(0, 80) || '(empty)';
       case 'DIVIDER': return `Style: ${c['style'] ?? 'thin'}`;
       case 'CTA': return (c['heading'] as string) || '(no heading)';

@@ -1,9 +1,10 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ImagePicker } from '../../image-picker/image-picker';
 
 @Component({
   selector: 'app-hero-block-editor',
-  imports: [FormsModule],
+  imports: [FormsModule, ImagePicker],
   templateUrl: './hero-block-editor.html',
 })
 export class HeroBlockEditor implements OnInit {

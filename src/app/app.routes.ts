@@ -54,6 +54,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/admin/page-editor/page-editor').then((m) => m.PageEditor),
   },
   {
+    path: 'admin/images',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/admin/images-admin/images-admin').then((m) => m.ImagesAdmin),
+  },
+  {
     path: 'pages/:slug',
     loadComponent: () => import('./pages/page/page').then((m) => m.PagePage),
   },
