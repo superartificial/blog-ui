@@ -2,6 +2,8 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { PostService } from '../../../services/post.service';
 import { PostSummary, formatPostDate } from '../../../models';
+import { DialogService } from '../../../services/dialog.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,6 +14,8 @@ import { PostSummary, formatPostDate } from '../../../models';
 export class Dashboard {
   private postService = inject(PostService);
   private router = inject(Router);
+  private dialogService = inject(DialogService);
+  private notifications = inject(NotificationService);
 
   posts = signal<PostSummary[]>([]);
   loading = signal(true);
@@ -46,18 +50,26 @@ export class Dashboard {
     this.router.navigate(['/admin/edit', post.id], { state: { post } });
   }
 
-  deletePost(post: PostSummary) {
-    if (!post.id || !confirm(`Delete "${post.title}"?`)) return;
+  async deletePost(post: PostSummary) {
+    if (!post.id) return;
+    const confirmed = await this.dialogService.confirm({
+      title: 'Delete post',
+      message: `Delete "${post.title}"? This cannot be undone.`,
+      confirmLabel: 'Delete',
+      danger: true,
+    });
+    if (!confirmed) return;
 
     this.deletingId.set(post.id);
     this.postService.deletePost(post.id).subscribe({
       next: () => {
         this.posts.update((list) => list.filter((p) => p.id !== post.id));
         this.deletingId.set(null);
+        this.notifications.success('Post deleted.');
       },
       error: () => {
         this.deletingId.set(null);
-        alert('Failed to delete post.');
+        this.notifications.error('Failed to delete post.');
       },
     });
   }

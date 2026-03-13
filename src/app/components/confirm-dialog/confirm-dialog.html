@@ -1,0 +1,16 @@
+@if (dialogService.pending(); as dialog) {
+  <div class="dialog-backdrop" (click)="dialogService.respond(false)">
+    <div class="dialog" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+      <h3 class="dialog-title">{{ dialog.config.title }}</h3>
+      <p class="dialog-message">{{ dialog.config.message }}</p>
+      <div class="dialog-actions">
+        <button class="btn-cancel" (click)="dialogService.respond(false)">Cancel</button>
+        <button
+          [class]="dialog.config.danger ? 'btn-confirm btn-confirm--danger' : 'btn-confirm'"
+          (click)="dialogService.respond(true)">
+          {{ dialog.config.confirmLabel ?? 'Confirm' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,6 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { ImageService } from '../../../services/image.service';
 import { ImageItem, formatPostDate } from '../../../models';
+import { DialogService } from '../../../services/dialog.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-images-admin',
@@ -10,6 +12,8 @@ import { ImageItem, formatPostDate } from '../../../models';
 })
 export class ImagesAdmin {
   private imageService = inject(ImageService);
+  private dialogService = inject(DialogService);
+  private notifications = inject(NotificationService);
 
   images = signal<ImageItem[]>([]);
   loading = signal(true);
@@ -33,19 +37,28 @@ export class ImagesAdmin {
     });
   }
 
-  deleteImage(img: ImageItem) {
-    if (img.referenceCount > 0) {
-      if (!confirm(`"${img.filename}" is referenced by ${img.referenceCount} item(s). Delete anyway?`)) return;
-    } else {
-      if (!confirm(`Delete "${img.filename}"? This cannot be undone.`)) return;
-    }
+  async deleteImage(img: ImageItem) {
+    const message = img.referenceCount > 0
+      ? `"${img.filename}" is referenced by ${img.referenceCount} item(s). Delete anyway?`
+      : `Delete "${img.filename}"? This cannot be undone.`;
+    const confirmed = await this.dialogService.confirm({
+      title: 'Delete image',
+      message,
+      confirmLabel: 'Delete',
+      danger: true,
+    });
+    if (!confirmed) return;
     this.deletingId.set(img.id);
     this.imageService.delete(img.id).subscribe({
       next: () => {
         this.images.update((list) => list.filter((i) => i.id !== img.id));
         this.deletingId.set(null);
+        this.notifications.success('Image deleted.');
       },
-      error: () => this.deletingId.set(null),
+      error: () => {
+        this.deletingId.set(null);
+        this.notifications.error('Failed to delete image.');
+      },
     });
   }
 

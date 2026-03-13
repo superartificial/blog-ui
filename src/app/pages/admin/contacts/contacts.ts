@@ -1,6 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ContactService } from '../../../services/contact.service';
 import { ContactSubmission, formatPostDate } from '../../../models';
+import { DialogService } from '../../../services/dialog.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-contacts',
@@ -10,6 +12,8 @@ import { ContactSubmission, formatPostDate } from '../../../models';
 })
 export class Contacts {
   private contactService = inject(ContactService);
+  private dialogService = inject(DialogService);
+  private notifications = inject(NotificationService);
 
   submissions = signal<ContactSubmission[]>([]);
   loading = signal(true);
@@ -59,16 +63,24 @@ export class Contacts {
     });
   }
 
-  deleteSubmission(submission: ContactSubmission) {
-    if (!confirm(`Delete message from ${submission.name}?`)) return;
+  async deleteSubmission(submission: ContactSubmission) {
+    const confirmed = await this.dialogService.confirm({
+      title: 'Delete message',
+      message: `Delete message from ${submission.name}? This cannot be undone.`,
+      confirmLabel: 'Delete',
+      danger: true,
+    });
+    if (!confirmed) return;
     this.deletingId.set(submission.id);
     this.contactService.deleteSubmission(submission.id).subscribe({
       next: () => {
         this.submissions.update((list) => list.filter((s) => s.id !== submission.id));
         this.deletingId.set(null);
+        this.notifications.success('Message deleted.');
       },
       error: () => {
         this.deletingId.set(null);
+        this.notifications.error('Failed to delete message.');
       },
     });
   }

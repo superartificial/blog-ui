@@ -5,6 +5,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CdkDragDrop, CdkDropList, CdkDrag, CdkDragHandle, moveItemInArray } from '@angular/cdk/drag-drop';
 import { PageService } from '../../../services/page.service';
 import { Page, ContentBlock, BlockType } from '../../../models';
+import { DialogService } from '../../../services/dialog.service';
+import { NotificationService } from '../../../services/notification.service';
 import { ImagePicker } from '../../../components/image-picker/image-picker';
 import { RichTextBlockEditor } from '../../../components/block-editors/rich-text-block-editor/rich-text-block-editor';
 import { HeroBlockEditor } from '../../../components/block-editors/hero-block-editor/hero-block-editor';
@@ -50,6 +52,8 @@ export class PageEditor {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private sanitizer = inject(DomSanitizer);
+  private dialogService = inject(DialogService);
+  private notifications = inject(NotificationService);
 
   readonly blockTypes = Object.keys(BLOCK_LABELS) as BlockType[];
   readonly blockLabels = BLOCK_LABELS;
@@ -227,8 +231,14 @@ export class PageEditor {
 
   // ── Block delete ─────────────────────────────────────────────────────────
 
-  deleteBlock(block: ContentBlock) {
-    if (!confirm(`Delete this ${BLOCK_LABELS[block.blockType]} block?`)) return;
+  async deleteBlock(block: ContentBlock) {
+    const confirmed = await this.dialogService.confirm({
+      title: 'Delete block',
+      message: `Delete this ${BLOCK_LABELS[block.blockType]} block?`,
+      confirmLabel: 'Delete',
+      danger: true,
+    });
+    if (!confirmed) return;
     this.deletingBlockId.set(block.id);
     this.pageService.deleteBlock(this.page()!.id, block.id).subscribe({
       next: () => {
@@ -236,7 +246,10 @@ export class PageEditor {
         if (this.editingBlockId() === block.id) this.cancelEdit();
         this.deletingBlockId.set(null);
       },
-      error: () => this.deletingBlockId.set(null),
+      error: () => {
+        this.deletingBlockId.set(null);
+        this.notifications.error('Failed to delete block.');
+      },
     });
   }
 

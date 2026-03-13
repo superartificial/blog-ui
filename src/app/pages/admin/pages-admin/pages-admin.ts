@@ -2,6 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { PageService } from '../../../services/page.service';
 import { PageSummary, formatPostDate } from '../../../models';
+import { DialogService } from '../../../services/dialog.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-pages-admin',
@@ -12,6 +14,8 @@ import { PageSummary, formatPostDate } from '../../../models';
 export class PagesAdmin {
   private pageService = inject(PageService);
   private router = inject(Router);
+  private dialogService = inject(DialogService);
+  private notifications = inject(NotificationService);
 
   pages = signal<PageSummary[]>([]);
   loading = signal(true);
@@ -39,16 +43,26 @@ export class PagesAdmin {
     this.router.navigate(['/admin/pages/edit', page.id]);
   }
 
-  deletePage(page: PageSummary) {
-    if (!confirm(`Delete page "${page.title}"? This cannot be undone.`)) return;
+  async deletePage(page: PageSummary) {
+    const confirmed = await this.dialogService.confirm({
+      title: 'Delete page',
+      message: `Delete "${page.title}"? This cannot be undone.`,
+      confirmLabel: 'Delete',
+      danger: true,
+    });
+    if (!confirmed) return;
 
     this.deletingId.set(page.id);
     this.pageService.deletePage(page.id).subscribe({
       next: () => {
         this.pages.update((list) => list.filter((p) => p.id !== page.id));
         this.deletingId.set(null);
+        this.notifications.success('Page deleted.');
       },
-      error: () => this.deletingId.set(null),
+      error: () => {
+        this.deletingId.set(null);
+        this.notifications.error('Failed to delete page.');
+      },
     });
   }
 
