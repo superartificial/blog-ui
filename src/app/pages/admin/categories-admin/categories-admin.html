@@ -23,7 +23,7 @@
     <p class="empty-msg">No categories yet. Add one above.</p>
   } @else {
     <ul class="cat-list">
-      @for (cat of categories(); track cat.id) {
+      @for (cat of categories(); track cat.id; let i = $index) {
         <li class="cat-item cat-item--top">
 
           @if (editingId() === cat.id) {
@@ -35,6 +35,10 @@
             </div>
           } @else {
             <div class="cat-row">
+              <div class="cat-order-btns">
+                <button class="btn-order" (click)="moveTop(i, -1)" [disabled]="i === 0" title="Move up">▲</button>
+                <button class="btn-order" (click)="moveTop(i, 1)" [disabled]="i === categories().length - 1" title="Move down">▼</button>
+              </div>
               <span class="cat-name">{{ cat.name }}</span>
               <span class="cat-slug">{{ cat.slug }}</span>
               <div class="cat-actions">
@@ -47,7 +51,7 @@
           <!-- Children -->
           @if (cat.children && cat.children.length > 0) {
             <ul class="cat-list cat-list--children">
-              @for (child of cat.children; track child.id) {
+              @for (child of cat.children; track child.id; let ci = $index) {
                 <li class="cat-item cat-item--child">
                   @if (editingId() === child.id) {
                     <div class="inline-form">
@@ -58,6 +62,10 @@
                     </div>
                   } @else {
                     <div class="cat-row">
+                      <div class="cat-order-btns">
+                        <button class="btn-order" (click)="moveChild(cat, ci, -1)" [disabled]="ci === 0" title="Move up">▲</button>
+                        <button class="btn-order" (click)="moveChild(cat, ci, 1)" [disabled]="ci === (cat.children?.length ?? 0) - 1" title="Move down">▼</button>
+                      </div>
                       <span class="cat-name">{{ child.name }}</span>
                       <span class="cat-slug">{{ child.slug }}</span>
                       <div class="cat-actions">

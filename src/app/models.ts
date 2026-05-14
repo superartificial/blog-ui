@@ -6,6 +6,7 @@ export interface Category {
   slug: string;
   parentId?: number | null;
   children?: Category[];
+  sortOrder: number;
 }
 
 export interface ImageItem {
@@ -80,6 +81,17 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string | null;
+}
+
+const CATEGORY_PALETTE = ['#087287', '#7318C8', '#A84F08', '#2d6a4f'];
+
+export function categoryColor(slug?: string | null): string {
+  if (!slug) return CATEGORY_PALETTE[0];
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) {
+    hash = (hash * 31 + slug.charCodeAt(i)) & 0x7fffffff;
+  }
+  return CATEGORY_PALETTE[hash % CATEGORY_PALETTE.length];
 }
 
 export function formatPostDate(date: string | number[] | undefined): string {

@@ -23,4 +23,8 @@ export class CategoryService {
   deleteCategory(id: number) {
     return this.http.delete<void>(`${this.apiUrl}/categories/${id}`);
   }
+
+  reorderCategories(items: { id: number; sortOrder: number }[]) {
+    return this.http.put<void>(`${this.apiUrl}/categories/reorder`, items);
+  }
 }
