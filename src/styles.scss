@@ -262,3 +262,15 @@ a {
   padding: 0.15em 0.55em;
   border-radius: 3px;
 }
+
+.post-category {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  color: var(--color-accent);
+  padding: 0.15em 0.55em;
+  border-radius: 3px;
+}

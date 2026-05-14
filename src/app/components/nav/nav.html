@@ -2,6 +2,41 @@
   <div class="nav-inner">
     <a class="nav-brand" routerLink="/">clem.nz</a>
     <div class="nav-links">
+
+      @for (cat of categories(); track cat.id) {
+        <div
+          class="nav-cat"
+          [class.nav-cat--active]="isCatActive(cat)"
+          [class.nav-cat--open]="openMenuId() === cat.id"
+          (mouseenter)="(cat.children ?? []).length > 0 && menuEnter(cat.id)"
+          (mouseleave)="(cat.children ?? []).length > 0 && menuLeave()"
+        >
+          <a
+            class="nav-cat__trigger"
+            [routerLink]="['/']"
+            [queryParams]="categoryParams(cat.slug)"
+            [attr.aria-expanded]="(cat.children ?? []).length > 0 ? openMenuId() === cat.id : null"
+            [attr.aria-haspopup]="(cat.children ?? []).length > 0 ? 'true' : null"
+          >{{ cat.name }}@if ((cat.children ?? []).length > 0) {<span class="nav-cat__arrow" aria-hidden="true">▾</span>}</a>
+
+          @if ((cat.children ?? []).length > 0) {
+            <div class="nav-cat__dropdown" role="menu">
+              <div class="nav-cat__dropdown-card">
+                @for (child of cat.children!; track child.id) {
+                  <a
+                    class="nav-cat__child"
+                    [class.nav-cat__child--active]="activeCategory() === child.slug"
+                    [routerLink]="['/']"
+                    [queryParams]="categoryParams(child.slug)"
+                    role="menuitem"
+                  >{{ child.name }}</a>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
       <a routerLink="/pages/about" routerLinkActive="active">About</a>
       <a routerLink="/contact" routerLinkActive="active">Contact</a>
     </div>
@@ -14,6 +49,7 @@
       <span class="admin-bar-label">Admin</span>
       <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Posts</a>
       <a routerLink="/admin/pages" routerLinkActive="active">Pages</a>
+      <a routerLink="/admin/categories" routerLinkActive="active">Categories</a>
       <a routerLink="/admin/contacts" routerLinkActive="active">Contacts</a>
       <a routerLink="/admin/images" routerLinkActive="active">Images</a>
       <button class="btn-admin-logout" (click)="authService.logout()">Logout</button>

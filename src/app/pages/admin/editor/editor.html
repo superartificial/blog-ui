@@ -71,6 +71,19 @@
     </div>
 
     <div class="field">
+      <label for="category">Category <span class="optional">(optional)</span></label>
+      <select id="category" name="category" [(ngModel)]="post.categoryId">
+        <option [ngValue]="undefined">— None —</option>
+        @for (cat of categories(); track cat.id) {
+          <option [ngValue]="cat.id">{{ cat.name }}</option>
+          @for (child of cat.children ?? []; track child.id) {
+            <option [ngValue]="child.id">&nbsp;&nbsp;&nbsp;↳ {{ child.name }}</option>
+          }
+        }
+      </select>
+    </div>
+
+    <div class="field">
       <label>Tags</label>
       <app-tag-input
         name="tags"

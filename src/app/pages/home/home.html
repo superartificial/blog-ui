@@ -16,13 +16,15 @@
 <main class="page-home">
   <div class="container">
 
+    @if (activeCategoryLabel()) {
+      <div class="filter-heading">
+        <span>{{ activeCategoryLabel() }}</span>
+        <a class="filter-clear" routerLink="/">All posts</a>
+      </div>
+    }
+
     @if (tags().length > 0) {
       <nav class="tag-filter">
-        <button
-          class="tag-filter__pill"
-          [class.tag-filter__pill--active]="activeTag() === null"
-          (click)="selectTag(null)"
-        >All</button>
         @for (tag of tags(); track tag) {
           <button
             class="tag-filter__pill"
@@ -34,9 +36,7 @@
     }
 
     @if (loading()) {
-      <div class="loading">
-        <span class="spinner"></span>
-      </div>
+      <div class="loading"><span class="spinner"></span></div>
     } @else if (error()) {
       <p class="error-msg">{{ error() }}</p>
     } @else if (posts().length === 0) {

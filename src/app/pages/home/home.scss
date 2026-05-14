@@ -32,6 +32,33 @@
   opacity: 0.6;
 }
 
+/* FILTER HEADING (active category label) */
+
+.filter-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+
+  span {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--color-text);
+  }
+}
+
+.filter-clear {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+}
+
 /* TAG FILTER */
 
 .tag-filter {
@@ -42,11 +69,11 @@
 }
 
 .tag-filter__pill {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  padding: 0.3rem 0.85rem;
+  padding: 0.2rem 0.65rem;
   border-radius: 999px;
-  border: 1px solid var(--color-border);
+  border: 1px dashed var(--color-border);
   background: var(--color-bg);
   color: var(--color-text-muted);
   cursor: pointer;
@@ -61,6 +88,7 @@
   &--active {
     background: var(--color-accent);
     border-color: var(--color-accent);
+    border-style: solid;
     color: #fff;
 
     &:hover {

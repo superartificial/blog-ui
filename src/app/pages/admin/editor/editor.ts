@@ -3,7 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PostService } from '../../../services/post.service';
 import { ImageService } from '../../../services/image.service';
-import { Post } from '../../../models';
+import { CategoryService } from '../../../services/category.service';
+import { Category, Post } from '../../../models';
 import { MarkdownEditor } from '../../../components/markdown-editor/markdown-editor';
 import { TagInput } from '../../../components/tag-input/tag-input';
 
@@ -16,6 +17,7 @@ import { TagInput } from '../../../components/tag-input/tag-input';
 export class Editor {
   private postService = inject(PostService);
   private imageService = inject(ImageService);
+  private categoryService = inject(CategoryService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -23,6 +25,7 @@ export class Editor {
   loading = signal(false);
   error = signal<string | null>(null);
   allTags = signal<string[]>([]);
+  categories = signal<Category[]>([]);
 
   post: Post = {
     title: '',
@@ -48,6 +51,7 @@ export class Editor {
 
   constructor() {
     this.postService.getTags().subscribe({ next: (tags) => this.allTags.set(tags) });
+    this.categoryService.getCategories().subscribe({ next: (cats) => this.categories.set(cats) });
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {

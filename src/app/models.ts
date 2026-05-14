@@ -1,5 +1,13 @@
 export type PostStatus = 'DRAFT' | 'AWAITING_REVIEW' | 'PUBLISHED' | 'ARCHIVED';
 
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  parentId?: number | null;
+  children?: Category[];
+}
+
 export interface ImageItem {
   id: number;
   filename: string;
@@ -40,6 +48,9 @@ export interface PostSummary {
   slug: string;
   excerpt?: string;
   status?: string;
+  categoryId?: number;
+  categoryName?: string;
+  categorySlug?: string;
   tags?: string[];
   createdAt?: string | number[];
   updatedAt?: string | number[];
@@ -49,6 +60,7 @@ export interface Post extends PostSummary {
   content: string;
   humanIntro?: string;
   aiNotes?: string;
+  categoryId?: number;
 }
 
 export interface ContactSubmission {

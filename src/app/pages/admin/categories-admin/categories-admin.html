@@ -1,0 +1,90 @@
+<main class="container page-categories">
+  <header class="page-header">
+    <h1>Categories</h1>
+    <button class="btn-primary" (click)="addingTop.set(true)" [hidden]="addingTop()">+ Top-level category</button>
+  </header>
+
+  @if (error()) {
+    <p class="error-msg">{{ error() }}</p>
+  }
+
+  @if (addingTop()) {
+    <div class="inline-form inline-form--top">
+      <input type="text" [(ngModel)]="newTopName" (ngModelChange)="onNewTopNameInput()" placeholder="Category name" />
+      <input type="text" [(ngModel)]="newTopSlug" placeholder="slug" />
+      <button class="btn-save" (click)="saveTop()">Save</button>
+      <button class="btn-cancel" (click)="addingTop.set(false)">Cancel</button>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading"><span class="spinner"></span></div>
+  } @else if (categories().length === 0 && !addingTop()) {
+    <p class="empty-msg">No categories yet. Add one above.</p>
+  } @else {
+    <ul class="cat-list">
+      @for (cat of categories(); track cat.id) {
+        <li class="cat-item cat-item--top">
+
+          @if (editingId() === cat.id) {
+            <div class="inline-form">
+              <input type="text" [(ngModel)]="editName" (ngModelChange)="onEditNameInput()" />
+              <input type="text" [(ngModel)]="editSlug" />
+              <button class="btn-save" (click)="saveEdit(cat)">Save</button>
+              <button class="btn-cancel" (click)="cancelEdit()">Cancel</button>
+            </div>
+          } @else {
+            <div class="cat-row">
+              <span class="cat-name">{{ cat.name }}</span>
+              <span class="cat-slug">{{ cat.slug }}</span>
+              <div class="cat-actions">
+                <button class="btn-action" (click)="startEdit(cat)">Rename</button>
+                <button class="btn-action btn-action--danger" (click)="delete(cat.id)">Delete</button>
+              </div>
+            </div>
+          }
+
+          <!-- Children -->
+          @if (cat.children && cat.children.length > 0) {
+            <ul class="cat-list cat-list--children">
+              @for (child of cat.children; track child.id) {
+                <li class="cat-item cat-item--child">
+                  @if (editingId() === child.id) {
+                    <div class="inline-form">
+                      <input type="text" [(ngModel)]="editName" (ngModelChange)="onEditNameInput()" />
+                      <input type="text" [(ngModel)]="editSlug" />
+                      <button class="btn-save" (click)="saveEdit(child)">Save</button>
+                      <button class="btn-cancel" (click)="cancelEdit()">Cancel</button>
+                    </div>
+                  } @else {
+                    <div class="cat-row">
+                      <span class="cat-name">{{ child.name }}</span>
+                      <span class="cat-slug">{{ child.slug }}</span>
+                      <div class="cat-actions">
+                        <button class="btn-action" (click)="startEdit(child)">Rename</button>
+                        <button class="btn-action btn-action--danger" (click)="delete(child.id)">Delete</button>
+                      </div>
+                    </div>
+                  }
+                </li>
+              }
+            </ul>
+          }
+
+          <!-- Add sub-category -->
+          @if (addingChildOf() === cat.id) {
+            <div class="inline-form inline-form--child">
+              <input type="text" [(ngModel)]="newChildName" (ngModelChange)="onNewChildNameInput()" placeholder="Sub-category name" />
+              <input type="text" [(ngModel)]="newChildSlug" placeholder="slug" />
+              <button class="btn-save" (click)="saveChild(cat.id)">Save</button>
+              <button class="btn-cancel" (click)="addingChildOf.set(null)">Cancel</button>
+            </div>
+          } @else {
+            <button class="btn-add-child" (click)="addingChildOf.set(cat.id)">+ Sub-category</button>
+          }
+
+        </li>
+      }
+    </ul>
+  }
+</main>
