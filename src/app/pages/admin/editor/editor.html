@@ -71,6 +71,15 @@
     </div>
 
     <div class="field">
+      <label>Tags</label>
+      <app-tag-input
+        name="tags"
+        [(ngModel)]="post.tags"
+        [existingTags]="allTags()"
+      />
+    </div>
+
+    <div class="field">
       <label for="status">Status</label>
       <select id="status" [(ngModel)]="post.status" name="status">
         <option value="DRAFT">Draft</option>

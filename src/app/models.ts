@@ -40,6 +40,7 @@ export interface PostSummary {
   slug: string;
   excerpt?: string;
   status?: string;
+  tags?: string[];
   createdAt?: string | number[];
   updatedAt?: string | number[];
 }

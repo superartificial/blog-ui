@@ -16,6 +16,23 @@
 <main class="page-home">
   <div class="container">
 
+    @if (tags().length > 0) {
+      <nav class="tag-filter">
+        <button
+          class="tag-filter__pill"
+          [class.tag-filter__pill--active]="activeTag() === null"
+          (click)="selectTag(null)"
+        >All</button>
+        @for (tag of tags(); track tag) {
+          <button
+            class="tag-filter__pill"
+            [class.tag-filter__pill--active]="activeTag() === tag"
+            (click)="selectTag(tag)"
+          >{{ tag }}</button>
+        }
+      </nav>
+    }
+
     @if (loading()) {
       <div class="loading">
         <span class="spinner"></span>

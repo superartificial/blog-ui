@@ -28,9 +28,9 @@
         <header class="post-header">
           <div class="post-meta">
             <time class="post-date">{{ formatDate(post()!.createdAt) }}</time>
-            <!-- Tag (implement when tags are available):
-            <span class="post-tag">{{ post()!.tag }}</span>
-            -->
+            @for (tag of post()!.tags; track tag) {
+              <span class="post-tag">{{ tag }}</span>
+            }
           </div>
           <h1 class="post-title">{{ post()!.title }}</h1>
         </header>

@@ -1,0 +1,119 @@
+.tag-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.6rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg);
+  cursor: text;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 15%, transparent);
+  }
+
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+  padding: 0.15em 0.3em 0.15em 0.55em;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.tag-chip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1em;
+  height: 1.1em;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 1em;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: background 0.1s, color 0.1s;
+
+  &:hover {
+    background: var(--color-border);
+    color: var(--color-text);
+  }
+}
+
+.tag-input-field {
+  position: relative;
+  flex: 1;
+  min-width: 8rem;
+}
+
+.tag-input__text {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: var(--color-text);
+  padding: 0.1rem 0;
+  min-width: 0;
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+}
+
+.tag-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: -0.6rem;
+  min-width: 180px;
+  max-height: 220px;
+  overflow-y: auto;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  list-style: none;
+  padding: 0.25rem 0;
+  z-index: 100;
+  margin: 0;
+}
+
+.tag-suggestions__item {
+  padding: 0.45rem 0.875rem;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  cursor: pointer;
+
+  &:hover,
+  &--highlighted {
+    background: var(--color-bg-secondary);
+    color: var(--color-accent);
+  }
+}
+
+.tag-input-hint {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 0.35rem;
+}

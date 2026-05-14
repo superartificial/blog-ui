@@ -5,10 +5,11 @@ import { PostService } from '../../../services/post.service';
 import { ImageService } from '../../../services/image.service';
 import { Post } from '../../../models';
 import { MarkdownEditor } from '../../../components/markdown-editor/markdown-editor';
+import { TagInput } from '../../../components/tag-input/tag-input';
 
 @Component({
   selector: 'app-editor',
-  imports: [FormsModule, RouterLink, MarkdownEditor],
+  imports: [FormsModule, RouterLink, MarkdownEditor, TagInput],
   templateUrl: './editor.html',
   styleUrl: './editor.scss',
 })
@@ -21,6 +22,7 @@ export class Editor {
   isEditing = signal(false);
   loading = signal(false);
   error = signal<string | null>(null);
+  allTags = signal<string[]>([]);
 
   post: Post = {
     title: '',
@@ -30,6 +32,7 @@ export class Editor {
     humanIntro: '',
     aiNotes: '',
     status: 'DRAFT',
+    tags: [],
   };
 
   readonly imageUploadFn = (
@@ -44,6 +47,8 @@ export class Editor {
   };
 
   constructor() {
+    this.postService.getTags().subscribe({ next: (tags) => this.allTags.set(tags) });
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditing.set(true);

@@ -13,11 +13,24 @@ export class Home {
   private postService = inject(PostService);
 
   posts = signal<PostSummary[]>([]);
+  tags = signal<string[]>([]);
+  activeTag = signal<string | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
 
   constructor() {
-    this.postService.getPosts().subscribe({
+    this.postService.getTags().subscribe({ next: (t) => this.tags.set(t) });
+    this.loadPosts();
+  }
+
+  selectTag(tag: string | null) {
+    this.activeTag.set(tag);
+    this.loadPosts(tag ?? undefined);
+  }
+
+  private loadPosts(tag?: string) {
+    this.loading.set(true);
+    this.postService.getPosts(tag).subscribe({
       next: (posts) => {
         this.posts.set(posts);
         this.loading.set(false);

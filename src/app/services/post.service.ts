@@ -8,8 +8,13 @@ export class PostService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
 
-  getPosts() {
-    return this.http.get<PostSummary[]>(`${this.apiUrl}/posts`);
+  getPosts(tag?: string) {
+    const params: Record<string, string> = tag ? { tag } : {};
+    return this.http.get<PostSummary[]>(`${this.apiUrl}/posts`, { params });
+  }
+
+  getTags() {
+    return this.http.get<string[]>(`${this.apiUrl}/posts/tags`);
   }
 
   getAllPosts() {

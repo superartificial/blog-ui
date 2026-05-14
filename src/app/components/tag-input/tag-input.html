@@ -1,0 +1,44 @@
+<div class="tag-input-wrapper" [class.tag-input-wrapper--disabled]="disabled()" (click)="focusInput()">
+  @for (tag of tags(); track tag) {
+    <span class="tag-chip">
+      {{ tag }}
+      <button
+        type="button"
+        class="tag-chip__remove"
+        (click)="$event.stopPropagation(); removeTag(tag)"
+        [attr.aria-label]="'Remove tag ' + tag"
+      >&times;</button>
+    </span>
+  }
+
+  <div class="tag-input-field">
+    <input
+      #textInput
+      type="text"
+      class="tag-input__text"
+      placeholder="{{ tags().length === 0 ? 'Add tags…' : '' }}"
+      [disabled]="disabled()"
+      [attr.aria-expanded]="dropdownOpen() && suggestions.length > 0"
+      aria-autocomplete="list"
+      (input)="onInput($event)"
+      (keydown)="onKeydown($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+    />
+
+    @if (dropdownOpen() && suggestions.length > 0) {
+      <ul class="tag-suggestions" role="listbox">
+        @for (tag of suggestions; track tag; let i = $index) {
+          <li
+            class="tag-suggestions__item"
+            [class.tag-suggestions__item--highlighted]="highlightedIndex() === i"
+            role="option"
+            (mousedown)="selectSuggestion(tag)"
+          >{{ tag }}</li>
+        }
+      </ul>
+    }
+  </div>
+</div>
+
+<p class="tag-input-hint">Press Enter, comma, or Tab to add · Backspace to remove last</p>
