@@ -1,17 +1,23 @@
-<section class="hero">
+<header class="masthead">
   <div class="container">
-    <h1 class="hero-name">Clem White</h1>
-    <p class="hero-disciplines">
+    <div class="masthead-grid">
+      <h1 class="masthead-name"><em>Clem</em> White</h1>
+<!--      <div class="masthead-section">-->
+<!--        <span class="masthead-section-label">Writing</span>-->
+<!--        @if (!loading()) {-->
+<!--          <span class="masthead-section-count">{{ posts().length }} {{ posts().length === 1 ? 'post' : 'posts' }}</span>-->
+<!--        }-->
+<!--      </div>-->
+    </div>
+    <p class="masthead-sub">
       <span>Software Developer</span>
-      <span class="sep">&middot;</span>
-      <span>3D &amp; Motion Designer</span>
-      <span class="sep">&middot;</span>
-      <span>Musician</span>
-      <span class="sep">&middot;</span>
-      <span>Photographer</span>
+      <span>3D &amp; Motion</span>
+      <span>Music</span>
+      <span>Photography</span>
+      <span>Auckland, NZ</span>
     </p>
   </div>
-</section>
+</header>
 
 <main class="page-home">
   <div class="container">
@@ -42,11 +48,11 @@
     } @else if (posts().length === 0) {
       <p class="empty-msg">No posts yet. Check back soon.</p>
     } @else {
-      <ul class="post-list">
+      <ol class="post-list">
         @for (post of posts(); track post.id) {
           <li><app-post-card [post]="post" /></li>
         }
-      </ul>
+      </ol>
     }
 
   </div>

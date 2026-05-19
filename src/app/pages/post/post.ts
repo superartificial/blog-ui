@@ -3,7 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PostService } from '../../services/post.service';
 import { AuthService } from '../../services/auth.service';
-import { Post, formatPostDate } from '../../models';
+import { Post, formatPostDate, categoryColor } from '../../models';
 import { renderMarkdown } from '../../utils/markdown';
 
 @Component({
@@ -57,6 +57,10 @@ export class PostPage {
       case 'ARCHIVED': return 'Archived — not publicly visible';
       default: return status;
     }
+  }
+
+  categoryColor(slug?: string | null): string {
+    return categoryColor(slug);
   }
 
   scrollTo(id: string) {

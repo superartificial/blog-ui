@@ -1,16 +1,17 @@
 .nav {
-  background: var(--color-bg-header);
+  background: var(--color-bg);
+  border-top: 3px solid var(--color-accent);
+  border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .nav-inner {
   max-width: var(--width-wide);
   margin: 0 auto;
-  padding: 0 1.5rem;
-  height: 3.25rem;
+  padding: 0 2.5rem;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -18,13 +19,13 @@
 
 .nav-brand {
   font-family: var(--font-serif);
-  font-size: 1.25rem;
-  color: #ffffff;
+  font-size: 1rem;
+  color: var(--color-text);
   letter-spacing: 0.01em;
   flex-shrink: 0;
 
   &:hover {
-    color: #e0e0e0;
+    color: var(--color-accent);
     text-decoration: none;
   }
 }
@@ -32,20 +33,20 @@
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
 
   > a {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.55);
-    letter-spacing: 0.06em;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
+    color: var(--color-text-muted);
     transition: color 0.15s;
     white-space: nowrap;
 
     &:hover,
     &.active {
-      color: #ffffff;
+      color: var(--color-accent);
       text-decoration: none;
     }
   }
@@ -59,10 +60,9 @@
   align-items: center;
 
   &--active .nav-cat__trigger {
-    color: #ffffff;
+    color: var(--color-accent);
   }
 
-  // Driven by --open class, not :hover — JS controls this with a close delay
   &--open .nav-cat__dropdown {
     opacity: 1;
     visibility: visible;
@@ -72,10 +72,10 @@
 }
 
 .nav-cat__trigger {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.55);
-  letter-spacing: 0.06em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   transition: color 0.15s;
   white-space: nowrap;
@@ -84,7 +84,7 @@
   gap: 0.3rem;
 
   &:hover {
-    color: #ffffff;
+    color: var(--color-accent);
     text-decoration: none;
   }
 }
@@ -103,15 +103,10 @@
 
 .nav-cat__dropdown {
   position: absolute;
-  // Sits flush against the nav bar bottom — no gap to cross
   top: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(-4px);
-
-  // Transparent top padding bridges the space between nav bar and the
-  // visible box, so the mouse never exits the container mid-travel
   padding-top: 0.6rem;
-
   min-width: 11rem;
   opacity: 0;
   visibility: hidden;
@@ -123,16 +118,14 @@
   }
 }
 
-// The visible card sits inside the dropdown so padding area stays transparent
 .nav-cat__dropdown-card {
-  background: var(--color-bg-header);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   padding: 0.4rem 0;
   position: relative;
 
-  // Caret
   &::before {
     content: '';
     position: absolute;
@@ -141,7 +134,7 @@
     transform: translateX(-50%);
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-bottom: 5px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 5px solid var(--color-border);
   }
 
   &::after {
@@ -152,24 +145,24 @@
     transform: translateX(-50%);
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-bottom: 5px solid var(--color-bg-header);
+    border-bottom: 5px solid var(--color-bg);
   }
 }
 
 .nav-cat__child {
   display: block;
   padding: 0.5rem 1.1rem;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-muted);
   letter-spacing: 0.04em;
   transition: color 0.1s, background 0.1s;
   white-space: nowrap;
   text-decoration: none;
 
   &:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.07);
+    color: var(--color-text);
+    background: var(--color-bg-secondary);
     text-decoration: none;
   }
 
@@ -189,7 +182,7 @@
 .admin-bar-inner {
   max-width: var(--width-wide);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 2.5rem;
   height: 2rem;
   display: flex;
   align-items: center;
@@ -212,7 +205,7 @@
 }
 
 .admin-bar-label {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;

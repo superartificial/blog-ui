@@ -12,7 +12,7 @@
       </div>
     } @else if (post()) {
       <div class="post-top-bar">
-        <a class="back-link" routerLink="/">← Writing</a>
+<!--        <a class="back-link" routerLink="/">← Writing</a>-->
         @if (authService.isLoggedIn()) {
           <a class="btn-edit-post" [routerLink]="['/admin/edit', post()!.id]">Edit post</a>
         }
@@ -26,16 +26,22 @@
 
       <article>
         <header class="post-header">
+          <p class="post-kicker">
+            @if (post()!.categoryName) {
+              <span class="post-kicker-cat"
+                    [style.color]="categoryColor(post()!.categorySlug)">{{ post()!.categoryName }}</span>
+            }
+            @if (post()!.tags && post()!.tags!.length > 0) {
+              @if (post()!.categoryName) {<span class="post-kicker-sep"> · </span>}
+              @for (tag of post()!.tags!; track tag; let last = $last) {
+                <span class="post-kicker-tag">{{ tag }}</span>@if (!last) {<span class="post-kicker-sep"> · </span>}
+              }
+            }
+          </p>
+          <h1 class="post-title">{{ post()!.title }}</h1>
           <div class="post-meta">
             <time class="post-date">{{ formatDate(post()!.createdAt) }}</time>
-            @if (post()!.categoryName) {
-              <span class="post-category">{{ post()!.categoryName }}</span>
-            }
-            @for (tag of post()!.tags; track tag) {
-              <span class="post-tag">{{ tag }}</span>
-            }
           </div>
-          <h1 class="post-title">{{ post()!.title }}</h1>
         </header>
 
         @if (renderedHumanIntro()) {

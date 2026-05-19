@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PostSummary, formatPostDate } from '../../models';
+import { PostSummary, formatPostDate, categoryColor } from '../../models';
 
 @Component({
   selector: 'app-post-card',
@@ -13,5 +13,9 @@ export class PostCard {
 
   formatDate(date: string | number[] | undefined): string {
     return formatPostDate(date);
+  }
+
+  rowColor(slug?: string | null): string {
+    return categoryColor(slug);
   }
 }
