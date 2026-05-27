@@ -28,10 +28,7 @@ export const appConfig: ApplicationConfig = {
         realm: environment.keycloak.realm,
         clientId: environment.keycloak.clientId,
       },
-      initOptions: {
-        onLoad: 'check-sso',
-        checkLoginIframe: false,
-      },
+      initOptions: {},
     }),
   ],
 };
