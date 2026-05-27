@@ -28,7 +28,9 @@ export const appConfig: ApplicationConfig = {
         realm: environment.keycloak.realm,
         clientId: environment.keycloak.clientId,
       },
-      initOptions: {},
+      initOptions: {
+        checkLoginIframe: false,
+      },
     }),
   ],
 };
