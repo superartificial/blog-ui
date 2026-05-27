@@ -1,37 +1,17 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
-import { LoginRequest, LoginResponse } from '../models';
-
-const TOKEN_KEY = 'blog_token';
+import { KeycloakService } from 'keycloak-angular';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private http = inject(HttpClient);
-  private router = inject(Router);
+  private keycloak = inject(KeycloakService);
 
-  readonly isLoggedIn = signal(!!localStorage.getItem(TOKEN_KEY));
+  readonly isLoggedIn = signal(this.keycloak.isLoggedIn());
 
-  login(credentials: LoginRequest) {
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials).pipe(
-      tap((res) => {
-        if (res.token) {
-          localStorage.setItem(TOKEN_KEY, res.token);
-          this.isLoggedIn.set(true);
-        }
-      }),
-    );
+  async login(redirectUri?: string) {
+    await this.keycloak.login({ redirectUri: redirectUri ?? window.location.origin + '/admin' });
   }
 
-  logout() {
-    localStorage.removeItem(TOKEN_KEY);
-    this.isLoggedIn.set(false);
-    this.router.navigate(['/']);
-  }
-
-  getToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+  async logout() {
+    await this.keycloak.logout(window.location.origin);
   }
 }

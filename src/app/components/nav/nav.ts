@@ -4,6 +4,7 @@ import { filter } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { CategoryService } from '../../services/category.service';
 import { Category } from '../../models';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-nav',
@@ -13,8 +14,11 @@ import { Category } from '../../models';
 })
 export class Nav implements OnInit {
   protected authService = inject(AuthService);
+  private keycloak = inject(KeycloakService);
   private categoryService = inject(CategoryService);
   private router = inject(Router);
+
+  readonly isLoggedIn = signal(this.keycloak.isLoggedIn());
 
   categories = signal<Category[]>([]);
   activeCategory = signal<string | null>(null);

@@ -74,14 +74,6 @@ export interface ContactSubmission {
   read: boolean;
 }
 
-export interface LoginRequest {
-  username: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  token: string | null;
-}
 
 const CATEGORY_PALETTE = ['#087287', '#7318C8', '#A84F08', '#2d6a4f'];
 

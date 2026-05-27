@@ -34,6 +34,8 @@
     "dompurify": "^3.3.2",
     "easymde": "^2.20.0",
     "highlight.js": "^11.11.1",
+    "keycloak-angular": "^21.0.0",
+    "keycloak-js": "^26.2.4",
     "marked": "^17.0.4",
     "marked-highlight": "^2.2.3",
     "rxjs": "~7.8.0",
