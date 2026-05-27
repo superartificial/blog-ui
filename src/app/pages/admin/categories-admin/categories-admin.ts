@@ -6,7 +6,7 @@ import { Category } from '../../../models';
 
 @Component({
   selector: 'app-categories-admin',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule],
   templateUrl: './categories-admin.html',
   styleUrl: './categories-admin.scss',
 })
