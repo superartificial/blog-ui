@@ -7,6 +7,24 @@
   </div>
 } @else if (page()) {
   <div class="page-wrap">
+
+    @if (page()!.showHeader) {
+      <header class="masthead">
+        <div class="container">
+          <div class="masthead-grid">
+            <h1 class="masthead-name"><em>Clem</em> White</h1>
+          </div>
+          <p class="masthead-sub">
+            <span>Software Developer</span>
+            <span>3D &amp; Motion</span>
+            <span>Music</span>
+            <span>Photography</span>
+            <span>Auckland, NZ</span>
+          </p>
+        </div>
+      </header>
+    }
+
     <div class="container container--narrow">
 
       @if (!isPreview() && authService.isLoggedIn()) {
@@ -21,9 +39,11 @@
         </div>
       }
 
-      <header class="page-header">
-        <h1 class="page-title">{{ page()!.title }}</h1>
-      </header>
+      @if (!page()!.showHeader) {
+        <header class="page-header">
+          <h1 class="page-title">{{ page()!.title }}</h1>
+        </header>
+      }
 
     </div>
 

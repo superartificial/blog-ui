@@ -34,6 +34,7 @@ export interface PageSummary {
   title: string;
   metaDescription?: string;
   status: PostStatus;
+  showHeader?: boolean;
   createdAt?: string | number[];
   updatedAt?: string | number[];
 }

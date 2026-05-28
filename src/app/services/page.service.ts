@@ -24,11 +24,11 @@ export class PageService {
     return this.http.get<Page>(`${this.apiUrl}/pages/admin/${id}`);
   }
 
-  createPage(req: { title: string; slug: string; metaDescription?: string; ogImageUrl?: string; status: string }) {
+  createPage(req: { title: string; slug: string; metaDescription?: string; ogImageUrl?: string; status: string; showHeader?: boolean }) {
     return this.http.post<Page>(`${this.apiUrl}/pages`, req);
   }
 
-  updatePage(id: number, req: Partial<{ title: string; slug: string; metaDescription: string; ogImageUrl: string; status: string }>) {
+  updatePage(id: number, req: Partial<{ title: string; slug: string; metaDescription: string; ogImageUrl: string; status: string; showHeader: boolean }>) {
     return this.http.put<Page>(`${this.apiUrl}/pages/${id}`, req);
   }
 

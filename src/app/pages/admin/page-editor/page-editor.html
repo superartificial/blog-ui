@@ -49,6 +49,12 @@
                 <option value="ARCHIVED">Archived</option>
               </select>
             </div>
+            <div class="field field--checkbox">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="showHeader" name="showHeader" />
+                Show header (masthead with name &amp; bio line)
+              </label>
+            </div>
             <div class="form-actions">
               <button class="btn-primary" (click)="saveMeta()" [disabled]="metaSaving()">
                 {{ metaSaving() ? 'Saving…' : isEditing() ? 'Save details' : 'Create page' }}

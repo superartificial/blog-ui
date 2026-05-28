@@ -153,6 +153,11 @@ $nav-h: 5.25rem;
   flex-direction: column;
   gap: 0.35rem;
 
+  &--checkbox {
+    flex-direction: row;
+    align-items: center;
+  }
+
   label {
     font-size: 0.85rem;
     font-weight: 500;
@@ -189,6 +194,24 @@ $nav-h: 5.25rem;
     padding-right: 2.5rem;
     cursor: pointer;
     max-width: 16rem;
+  }
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+
+  input[type='checkbox'] {
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    accent-color: var(--color-accent);
+    flex-shrink: 0;
   }
 }
 

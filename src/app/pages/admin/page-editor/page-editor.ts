@@ -69,6 +69,7 @@ export class PageEditor {
   metaDescription = '';
   ogImageUrl = '';
   status = 'DRAFT';
+  showHeader = false;
 
   metaSaving = signal(false);
   metaError = signal<string | null>(null);
@@ -111,6 +112,7 @@ export class PageEditor {
           this.metaDescription = page.metaDescription ?? '';
           this.ogImageUrl = page.ogImageUrl ?? '';
           this.status = page.status;
+          this.showHeader = page.showHeader ?? false;
           this.blocks.set([...page.blocks]);
           this.loading.set(false);
         },
@@ -154,6 +156,7 @@ export class PageEditor {
       metaDescription: this.metaDescription,
       ogImageUrl: this.ogImageUrl,
       status: this.status,
+      showHeader: this.showHeader,
     };
 
     if (this.isEditing()) {

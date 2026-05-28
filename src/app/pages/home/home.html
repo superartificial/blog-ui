@@ -1,33 +1,22 @@
-<header class="masthead">
-  <div class="container">
-    <div class="masthead-grid">
-      <h1 class="masthead-name"><em>Clem</em> White</h1>
-<!--      <div class="masthead-section">-->
-<!--        <span class="masthead-section-label">Writing</span>-->
-<!--        @if (!loading()) {-->
-<!--          <span class="masthead-section-count">{{ posts().length }} {{ posts().length === 1 ? 'post' : 'posts' }}</span>-->
-<!--        }-->
-<!--      </div>-->
+@if (showHeader()) {
+  <header class="masthead">
+    <div class="container">
+      <div class="masthead-grid">
+        <h1 class="masthead-name"><em>Clem</em> White</h1>
+      </div>
+      <p class="masthead-sub">
+        <span>Software Developer</span>
+        <span>3D &amp; Motion</span>
+        <span>Music</span>
+        <span>Photography</span>
+        <span>Auckland, NZ</span>
+      </p>
     </div>
-    <p class="masthead-sub">
-      <span>Software Developer</span>
-      <span>3D &amp; Motion</span>
-      <span>Music</span>
-      <span>Photography</span>
-      <span>Auckland, NZ</span>
-    </p>
-  </div>
-</header>
+  </header>
+}
 
 <main class="page-home">
   <div class="container">
-
-    @if (activeCategoryLabel()) {
-      <div class="filter-heading">
-        <span>{{ activeCategoryLabel() }}</span>
-        <a class="filter-clear" routerLink="/">All posts</a>
-      </div>
-    }
 
     @if (tags().length > 0) {
       <nav class="tag-filter">
