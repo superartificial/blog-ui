@@ -23,6 +23,8 @@ export class Nav implements OnInit {
   categories = signal<Category[]>([]);
   activeCategory = signal<string | null>(null);
   openMenuId = signal<number | null>(null);
+  mobileMenuOpen = signal(false);
+  openMobileCatId = signal<number | null>(null);
 
   private closeTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -37,16 +39,16 @@ export class Nav implements OnInit {
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
       syncFromUrl();
       this.closeMenu();
+      this.mobileMenuOpen.set(false);
+      this.openMobileCatId.set(null);
     });
   }
 
-  // Open immediately on enter, cancel any pending close
   menuEnter(id: number) {
     if (this.closeTimer) { clearTimeout(this.closeTimer); this.closeTimer = null; }
     this.openMenuId.set(id);
   }
 
-  // Delay close so the mouse has time to travel from trigger into the dropdown
   menuLeave() {
     this.closeTimer = setTimeout(() => this.openMenuId.set(null), 120);
   }
@@ -56,8 +58,21 @@ export class Nav implements OnInit {
     this.openMenuId.set(null);
   }
 
+  toggleMobileMenu() {
+    this.mobileMenuOpen.update(v => !v);
+    if (!this.mobileMenuOpen()) this.openMobileCatId.set(null);
+  }
+
+  toggleMobileCat(id: number) {
+    this.openMobileCatId.update(current => current === id ? null : id);
+  }
+
   @HostListener('document:keydown.escape')
-  onEscape() { this.closeMenu(); }
+  onEscape() {
+    this.closeMenu();
+    this.mobileMenuOpen.set(false);
+    this.openMobileCatId.set(null);
+  }
 
   isCatActive(cat: Category): boolean {
     const active = this.activeCategory();

@@ -28,6 +28,26 @@
   opacity: 0.6;
 }
 
+.footer-nav {
+  display: flex;
+  gap: 1.5rem;
+
+  a {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+
+    &:hover,
+    &.active {
+      color: var(--color-accent);
+    }
+  }
+}
+
 .footer-social {
   color: var(--color-text-muted);
   opacity: 0.6;

@@ -1,8 +1,12 @@
 <nav class="nav">
-  <div class="nav-inner">
-    <a class="nav-brand" routerLink="/">clem white</a>
-    <div class="nav-links">
+  <!-- Large faint watermark behind the nav bar -->
+  <div class="nav-wm-mask" aria-hidden="true">
+    <span class="nav-wm">clem white</span>
+  </div>
 
+  <div class="nav-inner">
+    <!-- Left: category links (desktop / tablet) -->
+    <div class="nav-left">
       @for (cat of categories(); track cat.id) {
         <div
           class="nav-cat"
@@ -36,11 +40,85 @@
           }
         </div>
       }
+    </div>
 
-      <a routerLink="/pages/about" routerLinkActive="active">About</a>
-      <a routerLink="/contact" routerLinkActive="active">Contact</a>
+    <!-- Right: home icon + contact icon + hamburger -->
+    <div class="nav-right">
+      <a class="nav-icon-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" aria-label="Home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </a>
+
+      <a class="nav-icon-link" routerLink="/contact" routerLinkActive="active" aria-label="Contact">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </a>
+
+      <button class="nav-hamburger" (click)="toggleMobileMenu()" [attr.aria-expanded]="mobileMenuOpen()" aria-label="Menu">
+        @if (mobileMenuOpen()) {
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        }
+      </button>
     </div>
   </div>
+
+  <!-- Mobile drawer (shown at narrow widths) -->
+  @if (mobileMenuOpen()) {
+    <div class="nav-mobile-drawer">
+      <!-- Home at top -->
+      <a class="nav-mob-home" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+
+      <!-- Categories: name is a link, arrow toggles subcategories -->
+      @for (cat of categories(); track cat.id) {
+        <div class="nav-mob-cat">
+          <div class="nav-mob-cat__row">
+            <a
+              class="nav-mob-cat__link"
+              [class.nav-mob-cat__link--active]="isCatActive(cat)"
+              [routerLink]="['/']"
+              [queryParams]="categoryParams(cat.slug)"
+            >{{ cat.name }}</a>
+            @if ((cat.children ?? []).length > 0) {
+              <button
+                class="nav-mob-cat__toggle"
+                [class.nav-mob-cat__toggle--open]="openMobileCatId() === cat.id"
+                (click)="toggleMobileCat(cat.id)"
+                aria-label="Expand subcategories"
+              ><span aria-hidden="true">▾</span></button>
+            }
+          </div>
+          @if ((cat.children ?? []).length > 0 && openMobileCatId() === cat.id) {
+            <div class="nav-mob-cat__children">
+              @for (child of cat.children!; track child.id) {
+                <a
+                  class="nav-mob-cat__child"
+                  [class.nav-mob-cat__child--active]="activeCategory() === child.slug"
+                  [routerLink]="['/']"
+                  [queryParams]="categoryParams(child.slug)"
+                >{{ child.name }}</a>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Footer links on separate lines -->
+      <div class="nav-mob-footer">
+        <a class="nav-mob-footer__link" routerLink="/pages/about" routerLinkActive="active">About</a>
+        <a class="nav-mob-footer__link" routerLink="/contact" routerLinkActive="active">Contact</a>
+      </div>
+    </div>
+  }
 </nav>
 
 @if (isLoggedIn()) {
